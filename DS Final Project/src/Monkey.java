@@ -9,7 +9,7 @@ public class Monkey {
 	private boolean canPopCamo;
 	private int x;
 	private int y;
-	
+	 
 	
 	public Monkey(int pCost, int pRange, int pDamage, int pAttackSpeed) {
 		damage = pDamage;
