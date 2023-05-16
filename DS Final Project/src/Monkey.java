@@ -9,6 +9,9 @@ public class Monkey {
 	private int x;
 	private int y;
 	
+	public BufferedImage image;
+	public double rotation; // in radians
+	
 	Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
 	int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
 	BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades

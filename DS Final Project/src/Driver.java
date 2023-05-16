@@ -1,6 +1,7 @@
 
 public class Driver {
 	public static void main(String[] args) {
-		ScreenGUI gui = new ScreenGUI();
+		Game game = new Game();
+		ScreenGUI gui = new ScreenGUI(game);
 	}
 }
