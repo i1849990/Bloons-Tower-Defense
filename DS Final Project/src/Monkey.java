@@ -1,24 +1,27 @@
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Monkey {
 	private int damage;
 	private int attackSpeed;
 	private int cost;
 	private int range;
-	private boolean canPopLead;
-	private boolean canPopIce;
-	private boolean canPopCamo;
 	private int x;
 	private int y;
-	 
 	
-	public Monkey(int pCost, int pRange, int pDamage, int pAttackSpeed) {
+	Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
+	int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
+	BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades
+	String[] upgradeDescriptions; // contains the upgrade flavor text
+	boolean[] upgradesPurchased; // are upgrades purchased
+	
+	public Monkey(int pCost, int pRange, int pDamage, int pAttackSpeed, int x, int y) {
 		damage = pDamage;
 		cost = pCost;
 		range = pRange;
 		attackSpeed = pAttackSpeed;
-		canPopLead = false;
-		canPopIce = false;
-		canPopCamo = false;
+		
+		upgradesPurchased = new boolean[]{false,false};
 	}
 	
 	public int getDamage() {
@@ -36,9 +39,7 @@ public class Monkey {
 	public int getCost() {
 		return cost;
 	}
-	public void setCost(int cost) {
-		this.cost = cost;
-	}
+	
 	public int getRange() {
 		return range;
 	}
@@ -48,21 +49,10 @@ public class Monkey {
 }
 
 class DartMonkey extends Monkey{
-	private int upgrade1Cost;
-	private int upgrade2Cost;
-	public DartMonkey() {
-		super(200, 50, 1, 2);
+
+	public DartMonkey(int x, int y) {
+		super(200, 50, 1, 2, x, y);
 		// TODO Auto-generated constructor stub
-	}
-	 
-	public void upgrade1() {
-		if(Game.money >= upgrade1Cost) {
-			super.setDamage(super.getDamage() + 1);
-		}
-	}
-	
-	public void upgrade2() {
-		
 	}
 
 }

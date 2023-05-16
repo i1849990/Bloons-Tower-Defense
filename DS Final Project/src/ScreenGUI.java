@@ -18,7 +18,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		frame.addMouseMotionListener(this);
 		frame.addMouseListener(this);
 		
-		frame.setSize(100,100);
+		frame.setSize(800,600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.add(this);
