@@ -13,18 +13,18 @@ public class Bloons {
 	private int y;
 	private int trackPoint;
 	private int speed;
-	private String color;
+	private int layer;
 	private boolean isCamo;
 	private boolean isSteel;
 	
 	
 	
-	public Bloons(int x, int y, int s, String c, boolean camo, boolean steel) {
+	public Bloons(int x, int y, int l, int s, boolean camo, boolean steel) {
 		
 		this.x = x;
 		this.y = y;
+		layer = l;
 		speed = s;
-		color = c;
 		isCamo = camo;
 		isSteel = steel;
 		
@@ -33,7 +33,25 @@ public class Bloons {
 	private int getTrackPoint() {
 		return trackPoint;
 	}
-	//method
 	
+	private int getX() {
+		return x;
+	}
+	
+	private int getY() {
+		return x;
+	}
+	
+	private void setX(int n) {
+		x = n;
+	}
+	
+	private void setY(int n) {
+		y = n;
+	}
+	
+	private void setSpeed(int s) {
+		speed = s;
+	}
 
 }
