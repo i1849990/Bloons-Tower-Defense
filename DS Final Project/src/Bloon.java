@@ -6,7 +6,7 @@ import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 
-public class Bloons {
+public class Bloon {
 	
 	
 	private int x;
@@ -19,7 +19,7 @@ public class Bloons {
 	
 	
 	
-	public Bloons(int x, int y, int l, int s, boolean camo, boolean steel) {
+	public Bloon(int x, int y, int l, int s, boolean camo, boolean steel) {
 		
 		this.x = x;
 		this.y = y;

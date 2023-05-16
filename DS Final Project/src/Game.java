@@ -1,6 +1,12 @@
+import java.util.ArrayList;
 
 public class Game {
-	public static int money;
+	public int money;
 	public int round;
+	
+	ArrayList<Bloon> bloons = new ArrayList<Bloon>();
+	ArrayList<Monkey> monkeys = new ArrayList<Monkey>();
+	
+	
 }
  
