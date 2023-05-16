@@ -3,11 +3,27 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.Image;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListener, ActionListener {
-
+	
+	public ScreenGUI() {
+		JFrame frame = new JFrame("Title Name");
+		frame.addMouseMotionListener(this);
+		frame.addMouseListener(this);
+		
+		frame.setSize(100,100);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.add(this);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
