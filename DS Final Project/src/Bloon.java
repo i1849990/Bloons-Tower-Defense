@@ -6,13 +6,15 @@ import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.Collection;
 
-public class Bloon {
+public class Bloon implements Comparable<Bloon>{
 	private int x;
 	private int y;
 	private int centeredX;
 	private int centeredY;
 	private int trackPoint;
+	private int trackDist;
 	private int layer;
 	private boolean isFrozen;
 	public static BufferedImage[] images;
@@ -26,12 +28,15 @@ public class Bloon {
 		y = t.yPoints[0];
 		this.layer = layer;
 		speed = speeds[layer];
+		trackDist = 0;
 	}
 	
 	// returns true if the bloon reaches the end of the track
 	private boolean moveTowardsNextPoint(Track t) {
 		int nextGoalX = t.xPoints[trackPoint];
 		int nextGoalY = t.yPoints[trackPoint];
+		
+		trackDist += speed;
 		
 		String dir1 = getNextDirection(centeredX, centeredY, nextGoalX, nextGoalY);
 		
@@ -144,6 +149,25 @@ public class Bloon {
 		update();
 	}
 	
+	public boolean popNumLayers(int dmg) {
+		layer -= dmg;
+		
+		if(layer < 0) {
+			return true;
+		}
+		
+		update();
+		return false;
+	}
+	
+	public int getLayersToBePopped(int dmg) {
+		if(layer - dmg < -1) {
+			return layer + 1;
+		}else {
+			return dmg;
+		}
+	}
+	
 	private int getTrackPoint() {
 		return trackPoint;
 	}
@@ -166,6 +190,82 @@ public class Bloon {
 	
 	private void setSpeed(int s) {
 		speed = s;
+	}
+
+	public int getCenteredX() {
+		return centeredX;
+	}
+
+	public void setCenteredX(int centeredX) {
+		this.centeredX = centeredX;
+	}
+
+	public int getCenteredY() {
+		return centeredY;
+	}
+
+	public void setCenteredY(int centeredY) {
+		this.centeredY = centeredY;
+	}
+
+	public int getLayer() {
+		return layer;
+	}
+
+	public void setLayer(int layer) {
+		this.layer = layer;
+	}
+
+	public boolean isFrozen() {
+		return isFrozen;
+	}
+
+	public void setFrozen(boolean isFrozen) {
+		this.isFrozen = isFrozen;
+	}
+
+	public static BufferedImage[] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[] images) {
+		Bloon.images = images;
+	}
+
+	public static int[] getSpeeds() {
+		return speeds;
+	}
+
+	public static void setSpeeds(int[] speeds) {
+		Bloon.speeds = speeds;
+	}
+
+	public Rectangle getHitbox() {
+		return hitbox;
+	}
+
+	public void setHitbox(Rectangle hitbox) {
+		this.hitbox = hitbox;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setTrackPoint(int trackPoint) {
+		this.trackPoint = trackPoint;
+	}
+
+	@Override
+	public int compareTo(Bloon b) {
+		// TODO Auto-generated method stub
+		if(trackDist == b.trackDist) {
+			return 0;
+		}else if(trackDist > b.trackDist) {
+			return 1;
+		}else {
+			return -1;
+		}
 	}
 
 }

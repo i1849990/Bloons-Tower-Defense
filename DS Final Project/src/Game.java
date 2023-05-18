@@ -1,7 +1,9 @@
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Game {
-	public int money;
+	public int cash;
 	public int lives;
 	public int round;
 	
@@ -11,18 +13,79 @@ public class Game {
 	Track track;
 	
 	public Game(Track track) {
-		money = 650;
+		cash = 650;
 		lives = 40;
+		round = 1;
 		this.track = track;
 	}
 	
 	public Game() { // constructor only used for testing until we have the x,y points to make a real track object
-		money = 650;
+		cash = 650;
 		lives = 40;
+		round = 1;
 	}
 	
 	public void bombExplosion() {
 		// acts differently from regular darts, see trello
+	}
+	
+	public void iceshot() {
+		// similar case to bomb explosion
+	}
+	
+	public void advanceRound() {
+		
+	}
+	
+	public void handleCollisions() {
+		for (Bloon b: bloons) {
+			for(Projectile p : projectiles) {
+				
+				if(p.hasPiercedBloon(b)) {
+					return;
+				}
+				if(!b.getHitbox().intersects(p.getHitbox())) {
+					return;
+				}
+				
+				int dmg = p.getDamage();
+				cash += b.getLayersToBePopped(dmg);
+				
+				if(b.popNumLayers(dmg)) {
+					bloons.remove(b);
+				}
+				if(p.handleCollision(b)) {
+					projectiles.remove(p);
+				}
+				
+			}
+		}
+	}
+	
+	public void moveBloons() {
+		for(Bloon b: bloons) {
+			b.move(track);
+		}
+	}
+	
+	public void moveProjectiles() {
+		for(Projectile p : projectiles) {
+			p.move();
+		}
+	}
+	
+	public Bloon getFurthestBloonInCircle(Monkey m) {
+		Collections.sort(bloons, Collections.reverseOrder());
+		for(Bloon b : bloons) {
+			if(bloonLiesInRangeOfMonkey(b,m)) {
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	private boolean bloonLiesInRangeOfMonkey(Bloon b, Monkey m) {
+		return Math.sqrt(Math.pow(m.getCenteredX() - b.getCenteredX(), 2) + Math.pow(m.getCenteredY() - b.getCenteredY(), 2)) <= m.getRange();
 	}
 	
 }
