@@ -16,7 +16,8 @@ public class Bloon {
 	private int speed;
 	private int layer;
 	private boolean isFrozen;
-	public BufferedImage image;
+	public BufferedImage[] images;
+	public Rectangle hitbox;
 	
 	public Bloon(int x, int y, int l, int s) {
 		trackPoint = 1;
@@ -126,7 +127,11 @@ public class Bloon {
 		
 	}
 	
-	
+	private void updateHitbox() {
+		int imgWidth = images[layer].getWidth();
+		int imgHeight = images[layer].getHeight();
+		hitbox = new Rectangle(centeredX - imgWidth / 2, centeredY - imgHeight / 2, imgWidth, imgHeight);
+	}
 	
 	private int getTrackPoint() {
 		return trackPoint;
