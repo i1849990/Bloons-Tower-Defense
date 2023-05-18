@@ -14,11 +14,12 @@ public class Monkey {
 	public BufferedImage image;
 	public double rotation; // in radians
 	
-	Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
-	int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
-	BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades
-	String[] upgradeDescriptions; // contains the upgrade flavor text
-	boolean[] upgradesPurchased; // are upgrades purchased
+	private Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
+	private int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
+	private BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades
+	private String[] upgradeDescriptions; // contains the upgrade flavor text
+	private boolean[] upgradesPurchased; // are upgrades purchased
+	private long lastAttackTime;
 	
 	public Monkey(int pCost, int pRange, int pDamage, int pAttackSpeed, int x, int y) {
 		damage = pDamage;
@@ -27,7 +28,13 @@ public class Monkey {
 		attackSpeed = pAttackSpeed;
 		
 		upgradesPurchased = new boolean[]{false,false};
+		lastAttackTime = System.currentTimeMillis();
 	}
+	
+	public boolean canAttack(long currTime) {
+		return false;
+	}
+	
 	
 	public int getDamage() {
 		return damage;
