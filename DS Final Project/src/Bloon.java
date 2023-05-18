@@ -13,28 +13,19 @@ public class Bloon {
 	private int centeredX;
 	private int centeredY;
 	private int trackPoint;
-	private int speed;
 	private int layer;
 	private boolean isFrozen;
-	public BufferedImage[] images;
+	public static BufferedImage[] images;
+	public static int[] speeds;
+	private int speed;
 	public Rectangle hitbox;
-	
-	public Bloon(int x, int y, int l, int s) {
-		trackPoint = 1;
-		this.x = x;
-		this.y = y;
-		layer = l;
-		speed = s;
-		
-		isFrozen = false;
-		
-	}
 	
 	public Bloon(Track t, int layer) {
 		trackPoint = 1;
 		x = t.xPoints[0];
 		y = t.yPoints[0];
 		this.layer = layer;
+		speed = speeds[layer];
 	}
 	
 	// returns true if the bloon reaches the end of the track
@@ -123,14 +114,34 @@ public class Bloon {
 		return dir;
 	}
 	
-	public void updatePositionFromCenteredXY() {
-		
+	private void updatePositionFromCenteredXY() {
+		int imgWidth = images[layer].getWidth();
+		int imgHeight = images[layer].getHeight();
+		x = centeredX - imgWidth / 2;
+		y = centeredY - imgHeight / 2;
 	}
 	
 	private void updateHitbox() {
 		int imgWidth = images[layer].getWidth();
 		int imgHeight = images[layer].getHeight();
-		hitbox = new Rectangle(centeredX - imgWidth / 2, centeredY - imgHeight / 2, imgWidth, imgHeight);
+		hitbox = new Rectangle(x, y, imgWidth, imgHeight);
+	}
+	
+	private void updateSpeed() {
+		speed = speeds[layer];
+	}
+	
+	public void update() {
+		updateSpeed();
+		updatePositionFromCenteredXY();
+		updateHitbox();
+	}
+	
+	public void move(Track t) {
+		if(!isFrozen) {
+			moveTowardsNextPoint(t);
+		}
+		update();
 	}
 	
 	private int getTrackPoint() {
@@ -155,10 +166,6 @@ public class Bloon {
 	
 	private void setSpeed(int s) {
 		speed = s;
-	}
-	
-	private void update() {
-		// should update the bloon's speed and image based on layer count
 	}
 
 }
