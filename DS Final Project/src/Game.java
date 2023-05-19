@@ -34,7 +34,8 @@ public class Game {
 	}
 	
 	public void advanceRound() {
-		
+		cash += 100;
+		round++;
 	}
 	
 	public void handleCollisions() {

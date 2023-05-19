@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 
 public class Monkey {
 	private int damage;
-	private int attackSpeed;
+	private long attackSpeed;
 	private int cost;
 	private int range;
 	private int x;
@@ -21,7 +21,7 @@ public class Monkey {
 	private boolean[] upgradesPurchased; // are upgrades purchased
 	private long lastAttackTime;
 	
-	public Monkey(int pCost, int pRange, int pDamage, int pAttackSpeed, int x, int y) {
+	public Monkey(int pCost, int pRange, int pDamage, long pAttackSpeed, int x, int y) {
 		damage = pDamage;
 		cost = pCost;
 		range = pRange;
@@ -32,7 +32,7 @@ public class Monkey {
 	}
 	
 	public boolean canAttack(long currTime) {
-		return false;
+		return currTime - lastAttackTime >= attackSpeed;
 	}
 	
 	
@@ -42,10 +42,10 @@ public class Monkey {
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
-	public int getAttackSpeed() {
+	public long getAttackSpeed() {
 		return attackSpeed;
 	}
-	public void setAttackSpeed(int attackSpeed) {
+	public void setAttackSpeed(long attackSpeed) {
 		this.attackSpeed = attackSpeed;
 	}
 	public int getCost() {

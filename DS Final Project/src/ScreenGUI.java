@@ -17,8 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListener, ActionListener {
-	Game game;
-	Timer t;
+	private Game game;
+	private Timer t;
+	private 
 	
 	BufferedImage map;
 	
@@ -89,6 +90,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
+		// handle clicks on screengui, then monkeys
+		
 		
 	}
 
