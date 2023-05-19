@@ -19,17 +19,20 @@ import javax.swing.Timer;
 public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListener, ActionListener {
 	private Game game;
 	private Timer t;
-	private 
+	private int mouseX;
+	private int mouseY;
 	
 	BufferedImage map;
 	
-	public ScreenGUI(Game game) {
+	public ScreenGUI() {
 		JFrame frame = new JFrame("Title Name");
 		frame.addMouseMotionListener(this);
 		frame.addMouseListener(this);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.add(this);
+		
+		game = new Game(new Track());
 		
 		frame.setSize(800 + 25, 600 + 50); // handles size of the frame
 		
@@ -54,7 +57,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 800, 600);
 		
+		game.nextFrame();
+		
 		drawBackground(g);
+		drawBloons(g);
 		System.out.println(System.currentTimeMillis() - time);
 	}
 	
@@ -65,6 +71,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			// TODO: figure out how to rotate images with AffineTransform
 			
 			 
+		}
+	}
+	
+	public void drawBloons(Graphics g) {
+		for (Bloon b : game.bloons) {
+			g.setColor(Color.red);
+			g.fillOval(b.getCenteredX(), b.getCenteredY(), 5, 5);
+			System.out.println(b.getCenteredX() + ", " + b.getCenteredY());
 		}
 	}
 	

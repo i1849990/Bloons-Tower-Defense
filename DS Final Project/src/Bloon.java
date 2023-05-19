@@ -18,14 +18,14 @@ public class Bloon implements Comparable<Bloon>{
 	private int layer;
 	private boolean isFrozen;
 	public static BufferedImage[] images;
-	public static int[] speeds;
+	public static int[] speeds = {2};
 	private int speed;
 	public Rectangle hitbox;
 	
 	public Bloon(Track t, int layer) {
 		trackPoint = 1;
-		x = t.xPoints[0];
-		y = t.yPoints[0];
+		centeredX = t.xPoints[0];
+		centeredY = t.yPoints[0];
 		this.layer = layer;
 		speed = speeds[layer];
 		trackDist = 0;
@@ -54,6 +54,8 @@ public class Bloon implements Comparable<Bloon>{
 			centeredY -= speed;
 			break;
 		}
+		
+		System.out.println("CenteredXY: " + centeredX + ", " + centeredY);
 		
 		String dir2 = getNextDirection(centeredX, centeredY, nextGoalX, nextGoalY);
 		
@@ -120,16 +122,17 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	private void updatePositionFromCenteredXY() {
-		int imgWidth = images[layer].getWidth();
-		int imgHeight = images[layer].getHeight();
-		x = centeredX - imgWidth / 2;
-		y = centeredY - imgHeight / 2;
+		// int imgWidth = images[layer].getWidth();
+		// int imgHeight = images[layer].getHeight();
+		// x = centeredX - imgWidth / 2;
+		// y = centeredY - imgHeight / 2;
+		// TEST ONLY:
 	}
 	
 	private void updateHitbox() {
-		int imgWidth = images[layer].getWidth();
-		int imgHeight = images[layer].getHeight();
-		hitbox = new Rectangle(x, y, imgWidth, imgHeight);
+		// int imgWidth = images[layer].getWidth();
+		// int imgHeight = images[layer].getHeight();
+		// hitbox = new Rectangle(x, y, imgWidth, imgHeight);
 	}
 	
 	private void updateSpeed() {
@@ -142,11 +145,13 @@ public class Bloon implements Comparable<Bloon>{
 		updateHitbox();
 	}
 	
-	public void move(Track t) {
+	public boolean move(Track t) {
 		if(!isFrozen) {
-			moveTowardsNextPoint(t);
+			update();
+			return moveTowardsNextPoint(t);
 		}
 		update();
+		return false;
 	}
 	
 	public boolean popNumLayers(int dmg) {
@@ -172,11 +177,11 @@ public class Bloon implements Comparable<Bloon>{
 		return trackPoint;
 	}
 	
-	private int getX() {
+	public int getX() {
 		return x;
 	}
 	
-	private int getY() {
+	public int getY() {
 		return x;
 	}
 	

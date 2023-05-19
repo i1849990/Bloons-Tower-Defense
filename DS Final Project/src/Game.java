@@ -17,12 +17,15 @@ public class Game {
 		lives = 40;
 		round = 1;
 		this.track = track;
+		
+		// FOR TESTING:
+		bloons.add(new Bloon(track, 0));
 	}
 	
-	public Game() { // constructor only used for testing until we have the x,y points to make a real track object
-		cash = 650;
-		lives = 40;
-		round = 1;
+	public void nextFrame() {
+		moveBloons();
+		moveProjectiles();
+		handleCollisions();
 	}
 	
 	public void bombExplosion() {
@@ -65,7 +68,9 @@ public class Game {
 	
 	public void moveBloons() {
 		for(Bloon b: bloons) {
-			b.move(track);
+			if(b.move(track)) {
+				bloonReachesEnd(b);
+			}
 		}
 	}
 	
@@ -87,6 +92,11 @@ public class Game {
 	
 	private boolean bloonLiesInRangeOfMonkey(Bloon b, Monkey m) {
 		return Math.sqrt(Math.pow(m.getCenteredX() - b.getCenteredX(), 2) + Math.pow(m.getCenteredY() - b.getCenteredY(), 2)) <= m.getRange();
+	}
+	
+	public void bloonReachesEnd(Bloon b) {
+		lives -= b.getLayer() + 1;
+		bloons.remove(b);
 	}
 	
 }
