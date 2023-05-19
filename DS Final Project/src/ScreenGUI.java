@@ -61,14 +61,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		game.nextFrame();
 		
 		drawBackground(g);
+		drawMonkeys(g);
 		drawBloons(g);
+		drawGUI(g);
 		//System.out.println(System.currentTimeMillis() - time);
 	}
 	
 	public void drawMonkeys(Graphics g) {
 		for(Monkey m : game.monkeys) {
-			BufferedImage image = m.image;
-			
 			// TODO: figure out how to rotate images with AffineTransform
 			
 			 
@@ -80,6 +80,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			g.setColor(Color.red);
 			g.fillOval(b.getCenteredX(), b.getCenteredY(), 5, 5);
 		}
+	}
+	
+	public void drawGUI(Graphics g) {
+		
 	}
 	
 	public void drawBackground(Graphics g) {
