@@ -64,7 +64,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeys(g);
 		drawBloons(g);
 		drawGUI(g);
-		//System.out.println(System.currentTimeMillis() - time);
+		System.out.println(System.currentTimeMillis() - time);
 	}
 	
 	public void drawMonkeys(Graphics g) {

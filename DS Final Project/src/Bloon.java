@@ -18,7 +18,7 @@ public class Bloon implements Comparable<Bloon>{
 	private int layer;
 	private boolean isFrozen;
 	public static BufferedImage[] images;
-	public static int[] speeds = {2};
+	public static int[] speeds = {5};
 	private int speed;
 	public Rectangle hitbox;
 	
@@ -33,6 +33,11 @@ public class Bloon implements Comparable<Bloon>{
 	
 	// returns true if the bloon reaches the end of the track
 	private boolean moveTowardsNextPoint(Track t) {
+		if(trackPoint >= t.xPoints.length) {
+			// bloon has passed the point
+			return true;
+		}
+		
 		int nextGoalX = t.xPoints[trackPoint];
 		int nextGoalY = t.yPoints[trackPoint];
 		
@@ -60,7 +65,7 @@ public class Bloon implements Comparable<Bloon>{
 		if(!dir1.equals(dir2) || (centeredX == nextGoalX && centeredY == nextGoalY)) {
 			// the bloon has passed the point, needs to
 			trackPoint++;
-			if(trackPoint > t.xPoints.length) {
+			if(trackPoint >= t.xPoints.length) {
 				// bloon has passed the point
 				return true;
 			}
