@@ -23,6 +23,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	private int mouseY;
 	
 	BufferedImage map;
+	private Monkey selectedMonkey;
 	
 	public ScreenGUI() {
 		JFrame frame = new JFrame("Title Name");
@@ -61,7 +62,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		drawBackground(g);
 		drawBloons(g);
-		System.out.println(System.currentTimeMillis() - time);
+		//System.out.println(System.currentTimeMillis() - time);
 	}
 	
 	public void drawMonkeys(Graphics g) {
@@ -78,12 +79,39 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		for (Bloon b : game.bloons) {
 			g.setColor(Color.red);
 			g.fillOval(b.getCenteredX(), b.getCenteredY(), 5, 5);
-			System.out.println(b.getCenteredX() + ", " + b.getCenteredY());
 		}
 	}
 	
 	public void drawBackground(Graphics g) {
 		g.drawImage(map,0,0,800,600, this);
+	}
+	
+	public String getMonkeyButtonClickedOn() {
+		int[] xLocations = {619, 656, 693, 729, 766};
+		String[] monkeys = {"dart", "tack", "ice", "bomb", "super"};
+		
+		for(int i = 0; i < xLocations.length; i++) {
+			int n = xLocations[i];
+			if(mouseLiesInCircle(n,171,17)) {
+				return monkeys[i];
+			}
+		}
+		
+		return null;
+	}
+	
+	private boolean mouseLiesInCircle(int circleX, int circleY, int radius) {
+		return Math.pow(mouseX - circleX, 2) + Math.pow(mouseY - circleY, 2) <= Math.pow(radius, 2);
+	}
+	
+	private Monkey monkeyClickedOn() {
+		for(Monkey m : game.monkeys) {
+			if(m.getHitbox().contains(mouseX, mouseY)) {
+				return m;
+			}
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -93,6 +121,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			repaint();
 		}
 		
+	}
+	
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		mouseX = e.getX() - 6;
+		mouseY = e.getY() - 29;
+		
+		repaint();		
 	}
 
 	@Override
@@ -106,6 +142,13 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// TODO Auto-generated method stub
 		// handle clicks on screengui, then monkeys
 		
+		if(getMonkeyButtonClickedOn() != null) {
+			selectedMonkey = null;
+		}else if (monkeyClickedOn() != null){
+			selectedMonkey = monkeyClickedOn();
+		}else {
+			selectedMonkey = null;
+		}
 		
 	}
 
@@ -129,12 +172,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

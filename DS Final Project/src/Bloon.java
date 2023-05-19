@@ -55,10 +55,7 @@ public class Bloon implements Comparable<Bloon>{
 			break;
 		}
 		
-		System.out.println("CenteredXY: " + centeredX + ", " + centeredY);
-		
 		String dir2 = getNextDirection(centeredX, centeredY, nextGoalX, nextGoalY);
-		
 		
 		if(!dir1.equals(dir2) || (centeredX == nextGoalX && centeredY == nextGoalY)) {
 			// the bloon has passed the point, needs to
