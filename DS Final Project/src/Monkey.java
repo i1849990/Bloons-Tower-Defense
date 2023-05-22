@@ -2,45 +2,46 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Monkey {
-	private int damage;
-	private long attackSpeed;
-	private int cost;
-	private int range;
-	private int x;
-	private int y;
-	private int centeredX;
-	private int centeredY;
+	protected int pierce;
+	protected long attackSpeed;
+	protected int cost;
+	protected int range;
+	protected int x;
+	protected int y;
+	protected int centeredX;
+	protected int centeredY;
 	
-	public BufferedImage image;
-	public double rotation; // in radians
+	protected BufferedImage image;
+	protected double rotation; // in radians
 	
-	private Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
-	private int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
-	private BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades
-	private String[] upgradeDescriptions; // contains the upgrade flavor text
-	private boolean[] upgradesPurchased; // are upgrades purchased
-	private long lastAttackTime;
+	protected Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
+	protected int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
+	protected BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades
+	protected String[] upgradeDescriptions; // contains the upgrade flavor text
+	protected boolean[] upgradesPurchased; // are upgrades purchased
+	protected int lastAttackFrame;
 	
-	public Monkey(int pCost, int pRange, int pDamage, long pAttackSpeed, int x, int y) {
-		damage = pDamage;
+	public Monkey(int pCost, int pRange, int pPierce, long pAttackSpeed, int x, int y, int currFrame) {
+		pierce = pPierce;
 		cost = pCost;
 		range = pRange;
 		attackSpeed = pAttackSpeed;
 		
-		upgradesPurchased = new boolean[]{false,false};
-		lastAttackTime = System.currentTimeMillis();
+		upgradesPurchased = new boolean[]{false, false};
+		
+		lastAttackFrame = currFrame;
 	}
 	
-	public boolean canAttack(long currTime) {
-		return currTime - lastAttackTime >= attackSpeed;
+	public boolean canAttack(int currFrame) {
+		return currFrame - lastAttackFrame >= attackSpeed;
 	}
 	
 	
-	public int getDamage() {
-		return damage;
+	public int getPierce() {
+		return pierce;
 	}
-	public void setDamage(int damage) {
-		this.damage = damage;
+	public void setPierce(int pierce) {
+		this.pierce = pierce;
 	}
 	public long getAttackSpeed() {
 		return attackSpeed;
@@ -155,9 +156,36 @@ public class Monkey {
 
 class DartMonkey extends Monkey{
 
-	public DartMonkey(int x, int y) {
-		super(200, 50, 1, 2, x, y);
-		// TODO Auto-generated constructor stub
+	public DartMonkey(int x, int y, int currFrame) {
+		super(250, 100, 1, 30, x, y, currFrame);
+		upgradeCosts = new int[] {210, 100};
+	}
+	
+	public void updateUpgrades() {
+		if(upgradesPurchased[0]) {
+			pierce = 2;
+		}
+		if(upgradesPurchased[1]) {
+			range = 125;
+		}
 	}
 
+}
+
+class TackShooter extends Monkey{
+
+	public TackShooter(int x, int y, int currFrame) {
+		super(400, 70, 1, 30, x, y, currFrame);
+		upgradeCosts = new int[] {250, 150};
+	}
+	
+	public void updateUpgrades() {
+		if(upgradesPurchased[0]) {
+			// increase attack speed
+		}
+		if(upgradesPurchased[1]) {
+			range = 80;
+		}
+	}
+	
 }

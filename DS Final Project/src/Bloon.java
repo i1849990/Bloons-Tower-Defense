@@ -18,7 +18,7 @@ public class Bloon implements Comparable<Bloon>{
 	private int layer;
 	private boolean isFrozen;
 	public static BufferedImage[] images;
-	public static int[] speeds = {5};
+	public static int[] speeds = {2,2,3,4,3,3};
 	private int speed;
 	public Rectangle hitbox;
 	
@@ -29,6 +29,10 @@ public class Bloon implements Comparable<Bloon>{
 		this.layer = layer;
 		speed = speeds[layer];
 		trackDist = 0;
+	}
+	
+	public void initializeImages() {
+		images = new BufferedImage[6];
 	}
 	
 	// returns true if the bloon reaches the end of the track
@@ -156,8 +160,12 @@ public class Bloon implements Comparable<Bloon>{
 		return false;
 	}
 	
-	public boolean popNumLayers(int dmg) {
-		layer -= dmg;
+	public boolean popLayer() {
+		if(layer == 5) {
+			layer -= 2; // white bloon should skip to yellow
+		}else {
+			layer--;
+		}
 		
 		if(layer < 0) {
 			return true;
@@ -167,12 +175,8 @@ public class Bloon implements Comparable<Bloon>{
 		return false;
 	}
 	
-	public int getLayersToBePopped(int dmg) {
-		if(layer - dmg < -1) {
-			return layer + 1;
-		}else {
-			return dmg;
-		}
+	public int getLayersToBePopped() {
+		return 1;
 	}
 	
 	private int getTrackPoint() {

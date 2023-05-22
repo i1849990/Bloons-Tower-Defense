@@ -37,7 +37,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		frame.setSize(800 + 25, 600 + 50); // handles size of the frame
 		
-		t = new Timer(16, this);
+		t = new Timer(32, this);
 		t.start();
 		
 		try {
@@ -67,6 +67,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		System.out.println(System.currentTimeMillis() - time);
 	}
 	
+	public void drawBackground(Graphics g) {
+		g.drawImage(map,0,0,800,600, this);
+	}
+	
 	public void drawMonkeys(Graphics g) {
 		for(Monkey m : game.monkeys) {
 			// TODO: figure out how to rotate images with AffineTransform
@@ -86,8 +90,16 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 	}
 	
-	public void drawBackground(Graphics g) {
-		g.drawImage(map,0,0,800,600, this);
+	public void drawUpgradeGUI(Graphics g) {
+		if(selectedMonkey == null) {
+			return;
+		}
+		// not purchasable: (167, 58, 45)
+		// purchasable, not hovered: (74, 180, 74)
+		// purchasable, hovered: (74, 241, 74)
+		// purchased: (51, 204, 51)
+		
+		// sell button: (167, 71, 45)
 	}
 	
 	public String getMonkeyButtonClickedOn() {

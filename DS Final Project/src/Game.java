@@ -52,14 +52,14 @@ public class Game {
 					return;
 				}
 				
-				int dmg = p.getDamage();
-				cash += b.getLayersToBePopped(dmg);
+				cash += 1;
 				
-				if(b.popNumLayers(dmg)) {
-					bloons.remove(b);
-				}
 				if(p.handleCollision(b)) {
 					projectiles.remove(p);
+				}
+				
+				if(b.popLayer()) {
+					bloons.remove(b);
 				}
 				
 			}
