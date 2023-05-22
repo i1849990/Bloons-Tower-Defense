@@ -14,15 +14,17 @@ public class Bloon implements Comparable<Bloon>{
 	private int centeredX;
 	private int centeredY;
 	private int trackPoint;
-	private int trackDist;
+	private double trackDist;
 	private int layer;
 	private boolean isFrozen;
+	private static Track t;
 	public static BufferedImage[] images;
-	public static int[] speeds = {2,2,3,4,3,3};
-	private int speed;
+	public static double[] speeds = {2,2,3,4,3,3};
+	private double speed;
 	public Rectangle hitbox;
 	
 	public Bloon(Track t, int layer) {
+		this.t = t;
 		trackPoint = 1;
 		centeredX = t.xPoints[0];
 		centeredY = t.yPoints[0];
@@ -36,82 +38,127 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	// returns true if the bloon reaches the end of the track
-	private boolean moveTowardsNextPoint(Track t) {
+//	private boolean moveTowardsNextPoint(Track t) {
+//		if(trackPoint >= t.xPoints.length) {
+//			// bloon has passed the point
+//			return true;
+//		}
+//		
+//		int nextGoalX = t.xPoints[trackPoint];
+//		int nextGoalY = t.yPoints[trackPoint];
+//		
+//		trackDist += speed;
+//		
+//		String dir1 = getNextDirection(nextGoalX, nextGoalY);
+//		
+//		switch(dir1) {
+//		case"right":
+//			centeredX += speed;
+//			break;
+//		case "left":
+//			centeredX -= speed;
+//			break;
+//		case "down":
+//			centeredY += speed;
+//			break;
+//		case "up":
+//			centeredY -= speed;
+//			break;
+//		}
+//		
+//		String dir2 = getNextDirection(nextGoalX, nextGoalY);
+//		
+//		if(!dir1.equals(dir2) || (centeredX == nextGoalX && centeredY == nextGoalY)) {
+//			// the bloon has passed the point, needs to
+//			trackPoint++;
+//			if(trackPoint >= t.xPoints.length) {
+//				// bloon has passed the point
+//				return true;
+//			}
+//			
+//			int distOvershot = 0;
+//			
+//			switch(dir1) {
+//			case"right":
+//				distOvershot = centeredX - nextGoalX;
+//				break;
+//			case "left":
+//				distOvershot = nextGoalX - centeredX;
+//				break;
+//			case "down":
+//				distOvershot = centeredY - nextGoalY;
+//				break;
+//			case "up":
+//				distOvershot = nextGoalY - centeredY;
+//				break;
+//			}
+//			
+//		}
+//		
+//		return false;
+//	}
+	
+	private boolean moveRec(double distRemaining, String nextDir) {
 		if(trackPoint >= t.xPoints.length) {
-			// bloon has passed the point
 			return true;
 		}
 		
 		int nextGoalX = t.xPoints[trackPoint];
 		int nextGoalY = t.yPoints[trackPoint];
 		
-		trackDist += speed;
-		
-		String dir1 = getNextDirection(centeredX, centeredY, nextGoalX, nextGoalY);
+		String dir1 = getNextDirection(nextGoalX, nextGoalY);
 		
 		switch(dir1) {
 		case"right":
-			centeredX += speed;
+			centeredX += distRemaining;
 			break;
 		case "left":
-			centeredX -= speed;
+			centeredX -= distRemaining;
 			break;
 		case "down":
-			centeredY += speed;
+			centeredY += distRemaining;
 			break;
 		case "up":
-			centeredY -= speed;
+			centeredY -= distRemaining;
 			break;
 		}
 		
-		String dir2 = getNextDirection(centeredX, centeredY, nextGoalX, nextGoalY);
+		String dir2 = getNextDirection(nextGoalX, nextGoalY);
 		
-		if(!dir1.equals(dir2) || (centeredX == nextGoalX && centeredY == nextGoalY)) {
-			// the bloon has passed the point, needs to
-			trackPoint++;
-			if(trackPoint >= t.xPoints.length) {
-				// bloon has passed the point
-				return true;
-			}
-			
-			int distOvershot = 0;
-			
-			switch(dir1) {
-			case"right":
-				distOvershot = centeredX - nextGoalX;
-				break;
-			case "left":
-				distOvershot = nextGoalX - centeredX;
-				break;
-			case "down":
-				distOvershot = centeredY - nextGoalY;
-				break;
-			case "up":
-				distOvershot = nextGoalY - centeredY;
-				break;
-			}
-			
-			switch(dir2) {
-			case"right":
-				centeredX += distOvershot;
-				break;
-			case "left":
-				centeredX -= distOvershot;
-				break;
-			case "down":
-				centeredY += distOvershot;
-				break;
-			case "up":
-				centeredY -= distOvershot;
-				break;
-			}
-			
+		if(dir1.equals(dir2)) {
+			return false;
 		}
 		
-		return false;
+		trackPoint++;
+		double distOvershot = 0;
+		
+		switch(dir1) {
+		case"right":
+			distOvershot = centeredX - nextGoalX;
+			break;
+		case "left":
+			distOvershot = nextGoalX - centeredX;
+			break;
+		case "down":
+			distOvershot = centeredY - nextGoalY;
+			break;
+		case "up":
+			distOvershot = nextGoalY - centeredY;
+			break;
+		}
+		
+		return moveRec(distOvershot, dir2);
 	}
 	
-	private String getNextDirection(int centeredX, int centeredY, int goalX, int goalY) {
+	private boolean startMoveRec() {
+		centeredX = -50;
+		centeredY = 280;
+		
+		System.out.println(trackDist);
+		return moveRec(trackDist,"right");
+	}
+	
+	private String getNextDirection(int goalX, int goalY) {
 		String dir = "";
 		
 		if(centeredX < goalX) {
@@ -151,10 +198,11 @@ public class Bloon implements Comparable<Bloon>{
 		updateHitbox();
 	}
 	
-	public boolean move(Track t) {
+	public boolean move() {
 		if(!isFrozen) {
 			update();
-			return moveTowardsNextPoint(t);
+			trackDist += speed;
+			return startMoveRec();
 		}
 		update();
 		return false;
@@ -198,10 +246,6 @@ public class Bloon implements Comparable<Bloon>{
 	private void setY(int n) {
 		y = n;
 	}
-	
-	private void setSpeed(int s) {
-		speed = s;
-	}
 
 	public int getCenteredX() {
 		return centeredX;
@@ -243,24 +287,12 @@ public class Bloon implements Comparable<Bloon>{
 		Bloon.images = images;
 	}
 
-	public static int[] getSpeeds() {
-		return speeds;
-	}
-
-	public static void setSpeeds(int[] speeds) {
-		Bloon.speeds = speeds;
-	}
-
 	public Rectangle getHitbox() {
 		return hitbox;
 	}
 
 	public void setHitbox(Rectangle hitbox) {
 		this.hitbox = hitbox;
-	}
-
-	public int getSpeed() {
-		return speed;
 	}
 
 	public void setTrackPoint(int trackPoint) {

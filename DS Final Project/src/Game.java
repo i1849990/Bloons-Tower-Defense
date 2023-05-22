@@ -68,7 +68,7 @@ public class Game {
 	
 	public void moveBloons() {
 		for(Bloon b: bloons) {
-			if(b.move(track)) {
+			if(b.move()) {
 				bloonReachesEnd(b);
 			}
 		}

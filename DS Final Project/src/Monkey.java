@@ -189,3 +189,21 @@ class TackShooter extends Monkey{
 	}
 	
 }
+
+class IceMonkey extends Monkey{
+
+	public IceMonkey(int x, int y, int currFrame) {
+		super(850, 70, 1, 30, x, y, currFrame);
+		upgradeCosts = new int[] {250, 150};
+	}
+	
+	public void updateUpgrades() {
+		if(upgradesPurchased[0]) {
+			// increase attack speed
+		}
+		if(upgradesPurchased[1]) {
+			range = 80;
+		}
+	}
+	
+}
