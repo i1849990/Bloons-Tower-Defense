@@ -32,10 +32,26 @@ public class Monkey {
 		lastAttackFrame = currFrame;
 	}
 	
+	public String[] getUpgradeStatus(int cash) {
+		String[] res = new String[2];
+		for(int i = 0; i < 2; i++) {
+			String str = "";
+			if(upgradesPurchased[i]) {
+				str = "purchased";
+			}else if(cash >= upgradeCosts[i]) {
+				str = "purchasable";
+			}else {
+				str = "unpurchasable";
+			}
+			res[i] = str;
+		}
+		
+		return res;
+	}
+	
 	public boolean canAttack(int currFrame) {
 		return currFrame - lastAttackFrame >= attackSpeed;
 	}
-	
 	
 	public int getPierce() {
 		return pierce;
