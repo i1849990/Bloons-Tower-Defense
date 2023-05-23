@@ -5,8 +5,12 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+
+import javax.imageio.ImageIO;
 
 public class Bloon implements Comparable<Bloon>{
 	private int x;
@@ -35,69 +39,29 @@ public class Bloon implements Comparable<Bloon>{
 	
 	public void initializeImages() {
 		images = new BufferedImage[6];
+		
+		try {
+			File file;
+			file = new File("redbloon.png");
+			images[0] = ImageIO.read(file);
+			file = new File("bluebloon.png");
+			images[1] = ImageIO.read(file);
+			file = new File("greenbloon.png");
+			images[2] = ImageIO.read(file);
+			file = new File("yellowbloon.png");
+			images[3] = ImageIO.read(file);
+			file = new File("blackbloon.png");
+			images[4] = ImageIO.read(file);
+			file = new File("whitebloon.png");
+			images[5] = ImageIO.read(file);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// returns true if the bloon reaches the end of the track
-//	private boolean moveTowardsNextPoint(Track t) {
-//		if(trackPoint >= t.xPoints.length) {
-//			// bloon has passed the point
-//			return true;
-//		}
-//		
-//		int nextGoalX = t.xPoints[trackPoint];
-//		int nextGoalY = t.yPoints[trackPoint];
-//		
-//		trackDist += speed;
-//		
-//		String dir1 = getNextDirection(nextGoalX, nextGoalY);
-//		
-//		switch(dir1) {
-//		case"right":
-//			centeredX += speed;
-//			break;
-//		case "left":
-//			centeredX -= speed;
-//			break;
-//		case "down":
-//			centeredY += speed;
-//			break;
-//		case "up":
-//			centeredY -= speed;
-//			break;
-//		}
-//		
-//		String dir2 = getNextDirection(nextGoalX, nextGoalY);
-//		
-//		if(!dir1.equals(dir2) || (centeredX == nextGoalX && centeredY == nextGoalY)) {
-//			// the bloon has passed the point, needs to
-//			trackPoint++;
-//			if(trackPoint >= t.xPoints.length) {
-//				// bloon has passed the point
-//				return true;
-//			}
-//			
-//			int distOvershot = 0;
-//			
-//			switch(dir1) {
-//			case"right":
-//				distOvershot = centeredX - nextGoalX;
-//				break;
-//			case "left":
-//				distOvershot = nextGoalX - centeredX;
-//				break;
-//			case "down":
-//				distOvershot = centeredY - nextGoalY;
-//				break;
-//			case "up":
-//				distOvershot = nextGoalY - centeredY;
-//				break;
-//			}
-//			
-//		}
-//		
-//		return false;
-//	}
-	
 	private boolean moveRec(double distRemaining, String nextDir) {
 		
 		int nextGoalX = t.xPoints[trackPoint];
@@ -182,17 +146,16 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	private void updatePositionFromCenteredXY() {
-		// int imgWidth = images[layer].getWidth();
-		// int imgHeight = images[layer].getHeight();
-		// x = centeredX - imgWidth / 2;
-		// y = centeredY - imgHeight / 2;
-		// TEST ONLY:
+		int imgWidth = images[layer].getWidth();
+		int imgHeight = images[layer].getHeight();
+		x = centeredX - imgWidth / 2;
+		y = centeredY - imgHeight / 2;
 	}
 	
 	private void updateHitbox() {
-		// int imgWidth = images[layer].getWidth();
-		// int imgHeight = images[layer].getHeight();
-		// hitbox = new Rectangle(x, y, imgWidth, imgHeight);
+		int imgWidth = images[layer].getWidth();
+		int imgHeight = images[layer].getHeight();
+		hitbox = new Rectangle(x, y, imgWidth, imgHeight);
 	}
 	
 	private void updateSpeed() {
@@ -228,6 +191,10 @@ public class Bloon implements Comparable<Bloon>{
 		
 		update();
 		return false;
+	}
+	
+	public BufferedImage getImage() {
+		return images[layer];
 	}
 	
 	public int getLayersToBePopped() {

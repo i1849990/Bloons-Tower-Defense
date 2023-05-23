@@ -90,8 +90,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	public void drawBloons(Graphics g) {
 		for (Bloon b : game.bloons) {
-			g.setColor(Color.red);
-			g.fillOval(b.getCenteredX(), b.getCenteredY(), 5, 5);
+			g.drawImage(b.getImage(), b.getX(), b.getY(), this);
 		}
 	}
 	
