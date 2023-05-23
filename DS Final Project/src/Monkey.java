@@ -10,6 +10,7 @@ public class Monkey {
 	protected int y;
 	protected int centeredX;
 	protected int centeredY;
+	protected String name;
 	
 	protected BufferedImage image;
 	protected double rotation; // in radians
@@ -168,12 +169,17 @@ public class Monkey {
 		this.cost = cost;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 }
 
 class DartMonkey extends Monkey{
 
 	public DartMonkey(int x, int y, int currFrame) {
 		super(250, 100, 1, 30, x, y, currFrame);
+		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
 	}
 	
@@ -192,6 +198,7 @@ class TackShooter extends Monkey{
 
 	public TackShooter(int x, int y, int currFrame) {
 		super(400, 70, 1, 30, x, y, currFrame);
+		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
 	}
 	
@@ -210,6 +217,7 @@ class IceMonkey extends Monkey{
 
 	public IceMonkey(int x, int y, int currFrame) {
 		super(850, 70, 1, 30, x, y, currFrame);
+		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
 	}
 	

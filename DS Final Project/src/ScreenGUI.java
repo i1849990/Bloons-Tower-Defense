@@ -67,8 +67,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawBloons(g);
 		drawGUI(g);
 		
-		
-		
 		if (nums == 100) {
 			System.out.println(sum / 100);
 			nums = 1;
@@ -100,6 +98,12 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	public void drawGUI(Graphics g) {
 		
+		//if(selectedMonkey != null) {
+			g.setColor(new Color(185, 220, 184));
+			g.fillRect(600, 198, 182, 297);
+			g.setColor(new Color(7, 124, 5));
+			g.fillRect(609, 223, 164, 4);
+		//}
 	}
 	
 	public void drawUpgradeGUI(Graphics g) {
