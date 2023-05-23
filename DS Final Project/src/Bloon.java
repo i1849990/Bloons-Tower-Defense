@@ -19,7 +19,7 @@ public class Bloon implements Comparable<Bloon>{
 	private boolean isFrozen;
 	private static Track t;
 	public static BufferedImage[] images;
-	public static double[] speeds = {2,2,3,4,3,3};
+	public static double[] speeds = {1.8,2.0,3,4,3,3};
 	private double speed;
 	public Rectangle hitbox;
 	
@@ -99,16 +99,13 @@ public class Bloon implements Comparable<Bloon>{
 //	}
 	
 	private boolean moveRec(double distRemaining, String nextDir) {
-		if(trackPoint >= t.xPoints.length) {
-			return true;
-		}
 		
 		int nextGoalX = t.xPoints[trackPoint];
 		int nextGoalY = t.yPoints[trackPoint];
 		
-		String dir1 = getNextDirection(nextGoalX, nextGoalY);
+		//String dir1 = getNextDirection(nextGoalX, nextGoalY);
 		
-		switch(dir1) {
+		switch(nextDir) {
 		case"right":
 			centeredX += distRemaining;
 			break;
@@ -125,14 +122,19 @@ public class Bloon implements Comparable<Bloon>{
 		
 		String dir2 = getNextDirection(nextGoalX, nextGoalY);
 		
-		if(dir1.equals(dir2)) {
+		if(nextDir.equals(dir2)) {
 			return false;
 		}
 		
 		trackPoint++;
+		
+		if(trackPoint >= t.xPoints.length) {
+			return true;
+		}
+		
 		double distOvershot = 0;
 		
-		switch(dir1) {
+		switch(nextDir) {
 		case"right":
 			distOvershot = centeredX - nextGoalX;
 			break;
@@ -147,14 +149,19 @@ public class Bloon implements Comparable<Bloon>{
 			break;
 		}
 		
-		return moveRec(distOvershot, dir2);
+		centeredX = nextGoalX;
+		centeredY = nextGoalY;
+		
+		String dir3 = getNextDirection(t.xPoints[trackPoint], t.yPoints[trackPoint]);
+		
+		return moveRec(distOvershot, dir3);
 	}
 	
 	private boolean startMoveRec() {
 		centeredX = -50;
 		centeredY = 280;
+		trackPoint = 1;
 		
-		System.out.println(trackDist);
 		return moveRec(trackDist,"right");
 	}
 	

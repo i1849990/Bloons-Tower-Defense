@@ -18,8 +18,6 @@ public class Game {
 		round = 1;
 		this.track = track;
 		
-		// FOR TESTING:
-		bloons.add(new Bloon(track, 0));
 	}
 	
 	public void nextFrame() {
@@ -97,6 +95,10 @@ public class Game {
 	public void bloonReachesEnd(Bloon b) {
 		lives -= b.getLayer() + 1;
 		bloons.remove(b);
+	}
+	
+	public void startGame() {
+		
 	}
 	
 }

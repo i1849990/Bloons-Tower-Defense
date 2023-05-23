@@ -25,6 +25,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	BufferedImage map;
 	private Monkey selectedMonkey;
 	
+	long sum; int nums;
+	
 	public ScreenGUI() {
 		JFrame frame = new JFrame("Title Name");
 		frame.addMouseMotionListener(this);
@@ -64,7 +66,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeys(g);
 		drawBloons(g);
 		drawGUI(g);
-		System.out.println(System.currentTimeMillis() - time);
+		if (nums == 100) {
+			System.out.println(sum / 100);
+			nums = 1;
+			sum = (System.currentTimeMillis() - time);
+		}else {
+			sum += (System.currentTimeMillis() - time);
+			nums++;
+		}
 	}
 	
 	public void drawBackground(Graphics g) {
