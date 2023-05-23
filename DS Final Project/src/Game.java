@@ -7,6 +7,8 @@ public class Game {
 	public int lives;
 	public int round;
 	
+	Bloon bloon;
+	
 	ArrayList<Bloon> bloons = new ArrayList<Bloon>();
 	ArrayList<Monkey> monkeys = new ArrayList<Monkey>();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
@@ -18,6 +20,10 @@ public class Game {
 		round = 1;
 		this.track = track;
 		
+		Bloon.initializeImages();
+		
+		bloon = new Bloon(track, 0);
+		bloons.add(bloon);
 	}
 	
 	public void nextFrame() {
@@ -59,7 +65,6 @@ public class Game {
 				if(b.popLayer()) {
 					bloons.remove(b);
 				}
-				
 			}
 		}
 	}

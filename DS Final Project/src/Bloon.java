@@ -32,12 +32,13 @@ public class Bloon implements Comparable<Bloon>{
 		trackPoint = 1;
 		centeredX = t.xPoints[0];
 		centeredY = t.yPoints[0];
+		updatePositionFromCenteredXY();
 		this.layer = layer;
 		speed = speeds[layer];
 		trackDist = 0;
 	}
 	
-	public void initializeImages() {
+	public static void initializeImages() {
 		images = new BufferedImage[6];
 		
 		try {
@@ -170,9 +171,10 @@ public class Bloon implements Comparable<Bloon>{
 	
 	public boolean move() {
 		if(!isFrozen) {
-			update();
 			trackDist += speed;
-			return startMoveRec();
+			boolean res = startMoveRec();
+			update();
+			return res;
 		}
 		update();
 		return false;
@@ -210,15 +212,7 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	public int getY() {
-		return x;
-	}
-	
-	private void setX(int n) {
-		x = n;
-	}
-	
-	private void setY(int n) {
-		y = n;
+		return y;
 	}
 
 	public int getCenteredX() {

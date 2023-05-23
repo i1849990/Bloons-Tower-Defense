@@ -66,6 +66,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeys(g);
 		drawBloons(g);
 		drawGUI(g);
+		
+		
+		
 		if (nums == 100) {
 			System.out.println(sum / 100);
 			nums = 1;
@@ -90,6 +93,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	public void drawBloons(Graphics g) {
 		for (Bloon b : game.bloons) {
+			System.out.println(b.getX() + " " + b.getY());
 			g.drawImage(b.getImage(), b.getX(), b.getY(), this);
 		}
 	}
