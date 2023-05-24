@@ -217,17 +217,53 @@ class IceMonkey extends Monkey{
 
 	public IceMonkey(int x, int y, int currFrame) {
 		super(850, 70, 1, 30, x, y, currFrame);
-		name = "Ice Monkey";
+
 		upgradeCosts = new int[] {250, 150};
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
-			// increase attack speed
+			//long freeze time
 		}
 		if(upgradesPurchased[1]) {
-			range = 80;
+			range = 75;
 		}
 	}
 	
+}
+
+class BombTower extends Monkey{
+
+	public BombTower(int x, int y, int currFrame) {
+		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
+		upgradeCosts = new int[] {210, 100};
+	}
+	
+	public void updateUpgrades() {
+		if(upgradesPurchased[0]) {
+			//bigger projectile
+		}
+		if(upgradesPurchased[1]) {
+			range = 140;
+		}
+	}
+
+}
+
+class SuperMonkey extends Monkey{
+
+	public SuperMonkey(int x, int y, int currFrame) {
+		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
+		upgradeCosts = new int[] {210, 100};
+	}
+	
+	public void updateUpgrades() {
+		if(upgradesPurchased[0]) {
+			pierce = 10; 
+		}
+		if(upgradesPurchased[1]) {
+			range = 175;
+		}
+	}
+
 }
