@@ -134,10 +134,18 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		case "Dart Monkey":
 			g.drawString("Fast", 710, 250);
 			break;
+		case "Tack Shooter":
+			g.drawString("Medium", 695, 250);
+			break;
 		case "Ice Monkey":
 			g.drawString("Slow", 710, 250);
 			break;
-		case "Bomb
+		case "Bomb Tower":
+			g.drawString("Medium", 695, 250);
+			break;
+		case "Super Monkey":
+			g.drawString("Hypersonic", 683, 250);
+			break;
 		}
 		
 		int range = selectedMonkey.getRange();
