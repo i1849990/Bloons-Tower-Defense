@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Image;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -97,25 +98,42 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void drawGUI(Graphics g) {
-		
-		//if(selectedMonkey != null) {
-			g.setColor(new Color(185, 220, 184));
-			g.fillRect(600, 198, 182, 297);
-			g.setColor(new Color(7, 124, 5));
-			g.fillRect(609, 223, 164, 4);
-		//}
+		drawUpgradeGUI(g);
 	}
 	
 	public void drawUpgradeGUI(Graphics g) {
+		selectedMonkey = new DartMonkey(300,300, 0);
 		if(selectedMonkey == null) {
 			return;
 		}
-		// not purchasable: (167, 58, 45)
-		// purchasable, not hovered: (74, 180, 74)
-		// purchasable, hovered: (74, 241, 74)
-		// purchased: (51, 204, 51)
 		
-		// sell button: (167, 71, 45)
+		g.setColor(new Color(185, 220, 184));
+		g.fillRect(600, 198, 182, 297);
+		g.setColor(new Color(7, 124, 5));
+		g.fillRect(609, 223, 164, 4);
+		
+		Font bold = new Font("Trebuchet MS", 1, 20);
+		Font boldSmall = new Font("Trebuchet MS", 1, 18);
+		Font small = new Font("Trebuchet MS", 0, 18);
+		
+		g.setFont(bold);
+		String name = selectedMonkey.getName();
+		switch(name) {
+		case"Dart Monkey":
+			g.drawString(name, 635, 218);
+			break;
+		}
+		
+		g.setFont(boldSmall);
+		g.drawString("Speed:", 620, 250);
+		g.drawString("Range:", 620, 275);
+		
+		g.setFont(small);
+		String attackSpeedText;
+		
+		int range = selectedMonkey.getRange();
+		g.drawString("" + range, 700, 275);
+		
 	}
 	
 	public String getMonkeyButtonClickedOn() {

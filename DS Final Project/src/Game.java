@@ -6,30 +6,29 @@ public class Game {
 	public int cash;
 	public int lives;
 	public int round;
-	
-	Bloon bloon;
-	
+
 	ArrayList<Bloon> bloons = new ArrayList<Bloon>();
 	ArrayList<Monkey> monkeys = new ArrayList<Monkey>();
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	Track track;
+	
+	private long currFrame;
 	
 	public Game(Track track) {
 		cash = 650;
 		lives = 40;
 		round = 1;
 		this.track = track;
+		currFrame = 0;
 		
 		Bloon.initializeImages();
-		
-		bloon = new Bloon(track, 0);
-		bloons.add(bloon);
 	}
 	
 	public void nextFrame() {
 		moveBloons();
 		moveProjectiles();
 		handleCollisions();
+		currFrame++;
 	}
 	
 	public void bombExplosion() {
@@ -48,7 +47,6 @@ public class Game {
 	public void handleCollisions() {
 		for (Bloon b: bloons) {
 			for(Projectile p : projectiles) {
-				
 				if(p.hasPiercedBloon(b)) {
 					return;
 				}
