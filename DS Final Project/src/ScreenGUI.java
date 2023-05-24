@@ -119,7 +119,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.setFont(bold);
 		String name = selectedMonkey.getName();
 		switch(name) {
-		case"Dart Monkey":
+		case "Dart Monkey":
 			g.drawString(name, 635, 218);
 			break;
 		}
@@ -130,7 +130,13 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		g.setFont(small);
 		String attackSpeedText;
-		
+		switch(name) {
+		case "Dart Monkey":
+			g.drawString("", mouseX, mouseY);
+			break;
+		case "Ice Monkey":
+			break;
+		}
 		int range = selectedMonkey.getRange();
 		g.drawString("" + range, 700, 275);
 		
