@@ -22,6 +22,7 @@ public class Game {
 		currFrame = 0;
 		
 		Bloon.initializeImages();
+		Monkey.initializeImages();
 	}
 	
 	public void nextFrame() {
