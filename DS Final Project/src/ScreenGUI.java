@@ -103,7 +103,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void drawMenuGUI(Graphics g) {
-		selectedMonkey = new DartMonkey(300,300, 0);
+		selectedMonkey = new SuperMonkey(300,300, 0);
 		if(selectedMonkey == null) {
 			return;
 		}
@@ -126,6 +126,18 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		case "Dart Monkey":
 			g.drawString(name, 635, 218);
 			break;
+		case "Tack Shooter":
+			g.drawString(name, 635, 218);
+			break;
+		case "Ice Monkey":
+			g.drawString(name, 635, 218);
+			break;
+		case "Bomb Tower":
+			g.drawString(name, 635, 218);
+			break;
+		case "Super Monkey":
+			g.drawString(name, 635, 218);
+			break;
 		}
 		
 		g.setFont(boldSmall);
@@ -133,7 +145,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.drawString("Range:", 620, height1);
 		
 		g.setFont(small);
-		String attackSpeedText;
 		switch(name) {
 		case "Dart Monkey":
 			g.drawString("Fast", 710, height0);
@@ -174,14 +185,11 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 				upgradeColors[i] = new Color(167, 58, 45);
 				break;
 			}
+			g.setColor(upgradeColors[i]);
+			g.fillRect(605 + 88 * i, 274, 85, 180);
+			
 			
 		}
-		
-		// upgrade backgrounds
-		g.setColor(upgradeColors[0]);
-		g.fillRect(605, 274, 85, 180);
-		g.setColor(upgradeColors[1]);
-		g.fillRect(693, 274, 85, 180);
 		
 		// draw upgrade images here
 		g.drawImage(selectedMonkey.getUpgradeImages()[0],605,274,this);

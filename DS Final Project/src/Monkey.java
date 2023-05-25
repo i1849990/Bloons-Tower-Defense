@@ -276,7 +276,7 @@ class IceMonkey extends Monkey{
 
 	public IceMonkey(int x, int y, int currFrame) {
 		super(850, 70, 1, 30, x, y, currFrame);
-
+		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
 		sellPrice = 680;
 	}
@@ -304,6 +304,7 @@ class BombTower extends Monkey{
 
 	public BombTower(int x, int y, int currFrame) {
 		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
+		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
 		sellPrice = 720;
 	}
@@ -331,6 +332,7 @@ class SuperMonkey extends Monkey{
 
 	public SuperMonkey(int x, int y, int currFrame) {
 		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
+		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
 		sellPrice = 3200;
 	}
