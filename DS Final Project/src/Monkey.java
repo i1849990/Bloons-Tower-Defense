@@ -1,5 +1,9 @@
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Monkey {
 	protected int pierce;
@@ -17,7 +21,7 @@ public class Monkey {
 	
 	protected Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
 	protected int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
-	protected BufferedImage[] upgradeImages; // contains the image icons for the monkey upgrades
+	protected static BufferedImage[][] upgradeImages; // contains the image icons for the monkey upgrades
 	protected String[] upgradeDescriptions; // contains the upgrade flavor text
 	protected boolean[] upgradesPurchased; // are upgrades purchased
 	protected int lastAttackFrame;
@@ -32,6 +36,42 @@ public class Monkey {
 		upgradesPurchased = new boolean[]{false, false};
 		
 		lastAttackFrame = currFrame;
+	}
+	
+	public static void initializeImages() {
+		try {
+			upgradeImages = new BufferedImage[5][2];
+			File file;
+			
+			file = new File("dartMonkeyUpgrade0.png");
+			upgradeImages[0][0] = ImageIO.read(file);
+			file = new File("dartMonkeyUpgrade1.png");
+			upgradeImages[0][1] = ImageIO.read(file);
+			
+			file = new File("tackShooterUpgrade0.png");
+			upgradeImages[1][0] = ImageIO.read(file);
+			file = new File("tackShooterUpgrade1.png");
+			upgradeImages[1][1] = ImageIO.read(file);
+			
+			file = new File("iceMonkeyUpgrade0.png");
+			upgradeImages[2][0] = ImageIO.read(file);
+			file = new File("iceMonkeyUpgrade1.png");
+			upgradeImages[2][1] = ImageIO.read(file);
+			
+			file = new File("bombTowerUpgrade0.png");
+			upgradeImages[3][0] = ImageIO.read(file);
+			file = new File("bombTowerUpgrade1.png");
+			upgradeImages[3][1] = ImageIO.read(file);
+			
+			file = new File("superMonkeyUpgrade0.png");
+			upgradeImages[4][0] = ImageIO.read(file);
+			file = new File("superMonkeyUpgrade1.png");
+			upgradeImages[4][1] = ImageIO.read(file);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String[] getUpgradeStatus(int cash) {
@@ -142,14 +182,6 @@ public class Monkey {
 		this.upgradeCosts = upgradeCosts;
 	}
 
-	public BufferedImage[] getUpgradeImages() {
-		return upgradeImages;
-	}
-
-	public void setUpgradeImages(BufferedImage[] upgradeImages) {
-		this.upgradeImages = upgradeImages;
-	}
-
 	public String[] getUpgradeDescriptions() {
 		return upgradeDescriptions;
 	}
@@ -202,7 +234,10 @@ class DartMonkey extends Monkey{
 			sellPrice = 448;
 		}
 	}
-
+	
+	public BufferedImage[] getUpgradeImages() {
+		return upgradeImages[0];
+	}
 }
 
 class TackShooter extends Monkey{
@@ -228,6 +263,9 @@ class TackShooter extends Monkey{
 		}
 	}
 	
+	public BufferedImage[] getUpgradeImages() {
+		return upgradeImages[1];
+	}
 }
 
 class IceMonkey extends Monkey{
@@ -253,13 +291,16 @@ class IceMonkey extends Monkey{
 		}
 	}
 	
+	public BufferedImage[] getUpgradeImages() {
+		return upgradeImages[2];
+	}
 }
 
 class BombTower extends Monkey{
 
 	public BombTower(int x, int y, int currFrame) {
 		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
-		upgradeCosts = new int[] {210, 100};
+		upgradeCosts = new int[] {650, 250};
 		sellPrice = 720;
 	}
 	
@@ -276,26 +317,35 @@ class BombTower extends Monkey{
 			// update sell price 
 		}
 	}
-
+	
+	public BufferedImage[] getUpgradeImages() {
+		return upgradeImages[3];
+	}
 }
 
 class SuperMonkey extends Monkey{
 
 	public SuperMonkey(int x, int y, int currFrame) {
 		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
-		upgradeCosts = new int[] {210, 100};
+		upgradeCosts = new int[] {4500, 2400};
 		sellPrice = 3200;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
-			pierce = 10; 
-			// update sell price 
+			pierce = 2; 
+			sellPrice = 6800;
 		}
 		if(upgradesPurchased[1]) {
 			range = 175;
-			// update sell price 
+			sellPrice = 5120;
+		}
+		if(upgradesPurchased[0] && upgradesPurchased[1]) {
+			
 		}
 	}
-
+	
+	public BufferedImage[] getUpgradeImages() {
+		return upgradeImages[4];
+	}
 }
