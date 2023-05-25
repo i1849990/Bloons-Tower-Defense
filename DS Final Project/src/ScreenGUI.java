@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -98,10 +99,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void drawGUI(Graphics g) {
-		drawUpgradeGUI(g);
+		drawMenuGUI(g);
 	}
 	
-	public void drawUpgradeGUI(Graphics g) {
+	public void drawMenuGUI(Graphics g) {
 		selectedMonkey = new DartMonkey(300,300, 0);
 		if(selectedMonkey == null) {
 			return;
@@ -116,6 +117,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		Font boldSmall = new Font("Trebuchet MS", 1, 18);
 		Font small = new Font("Trebuchet MS", 0, 18);
 		
+		int height0 = 245;
+		int height1 = 265;
+		
 		g.setFont(bold);
 		String name = selectedMonkey.getName();
 		switch(name) {
@@ -125,21 +129,85 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		}
 		
 		g.setFont(boldSmall);
-		g.drawString("Speed:", 620, 250);
-		g.drawString("Range:", 620, 275);
+		g.drawString("Speed:", 620, height0);
+		g.drawString("Range:", 620, height1);
 		
 		g.setFont(small);
 		String attackSpeedText;
 		switch(name) {
 		case "Dart Monkey":
-			g.drawString("", mouseX, mouseY);
+			g.drawString("Fast", 710, height0);
+			break;
+		case "Tack Shooter":
+			g.drawString("Medium", 695, height0);
 			break;
 		case "Ice Monkey":
+			g.drawString("Slow", 710, height0);
+			break;
+		case "Bomb Tower":
+			g.drawString("Medium", 695, height0);
+			break;
+		case "Super Monkey":
+			g.drawString("Hypersonic", 683, height0);
 			break;
 		}
-		int range = selectedMonkey.getRange();
-		g.drawString("" + range, 700, 275);
 		
+		int range = selectedMonkey.getRange();
+		g.drawString(""+range, 710, height1);
+		
+		Color[] upgradeColors = new Color[2];
+		String[] upgradeStatus = selectedMonkey.getUpgradeStatus(game.cash);
+		
+		for(int i = 0; i < 2; i++) {
+			switch(upgradeStatus[i]) {
+			case "purchased":
+				upgradeColors[i] = new Color(51, 204, 51);
+				break;
+			case "purchasable":
+				if(mouseHoveringUpgrades()[i]) {
+					upgradeColors[i] = new Color(74, 240, 74);
+				}else {
+					upgradeColors[i] = new Color(74, 180, 74);
+				}
+				break;
+			case "unpurchasable":
+				upgradeColors[i] = new Color(167, 58, 45);
+				break;
+			}
+			
+		}
+		
+		// upgrade backgrounds
+		g.setColor(upgradeColors[0]);
+		g.fillRect(605, 274, 85, 180);
+		g.setColor(upgradeColors[1]);
+		g.fillRect(693, 274, 85, 180);
+		
+		// draw upgrade images here
+		//g.drawImage(selectedMonkey.getUpgradeImages()[0],605,274,this);
+		//g.drawImage(selectedMonkey.getUpgradeImages()[1],693,274,this);
+		
+		// sell button
+		g.setColor(new Color(168, 70, 46));
+		g.fillRect(605, 460, 173, 29);
+		
+		// round start button
+		g.setColor(new Color(162, 216, 162));
+		g.fillRect(600, 500, 182, 63);
+		
+		
+	}
+	
+	public boolean[] mouseHoveringUpgrades() {
+		Rectangle rect0 = new Rectangle(605, 274, 85, 180);
+		Rectangle rect1 = new Rectangle(693, 274, 85, 180);
+		if(rect0.contains(mouseX, mouseY)) {
+			return  new boolean[] {true, false};
+		}else if(rect1.contains(mouseX, mouseY)) {
+			return new boolean[] {false, true};
+		}else {
+			return new boolean[] {false, false};
+		}
 	}
 	
 	public String getMonkeyButtonClickedOn() {
@@ -156,9 +224,12 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		return null;
 	}
 	
+	
 	private boolean mouseLiesInCircle(int circleX, int circleY, int radius) {
 		return Math.pow(mouseX - circleX, 2) + Math.pow(mouseY - circleY, 2) <= Math.pow(radius, 2);
 	}
+	
+	//private boolean mouseClickedOnUpgrades
 	
 	private Monkey monkeyClickedOn() {
 		for(Monkey m : game.monkeys) {
