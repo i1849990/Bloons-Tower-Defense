@@ -184,8 +184,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.fillRect(693, 274, 85, 180);
 		
 		// draw upgrade images here
-		//g.drawImage(selectedMonkey.getUpgradeImages()[0],605,274,this);
-		//g.drawImage(selectedMonkey.getUpgradeImages()[1],693,274,this);
+		g.drawImage(selectedMonkey.getUpgradeImages()[0],605,274,this);
+		g.drawImage(selectedMonkey.getUpgradeImages()[1],693,274,this);
 		
 		// sell button
 		g.setColor(new Color(168, 70, 46));

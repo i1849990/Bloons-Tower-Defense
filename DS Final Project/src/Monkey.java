@@ -210,6 +210,10 @@ public class Monkey {
 		return sellPrice;
 	}
 	
+	// returns null, is meant to be overriden
+	public BufferedImage[] getUpgradeImages() {
+		return null;
+	}
 }
 
 class DartMonkey extends Monkey{
