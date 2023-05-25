@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 
 public class Monkey {
 	protected int pierce;
-	protected long attackSpeed;
+	protected int attackSpeed;
 	protected int cost;
 	protected int range;
 	protected int x;
@@ -21,8 +21,9 @@ public class Monkey {
 	protected String[] upgradeDescriptions; // contains the upgrade flavor text
 	protected boolean[] upgradesPurchased; // are upgrades purchased
 	protected int lastAttackFrame;
+	protected int sellPrice;
 	
-	public Monkey(int pCost, int pRange, int pPierce, long pAttackSpeed, int x, int y, int currFrame) {
+	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame) {
 		pierce = pPierce;
 		cost = pCost;
 		range = pRange;
@@ -63,7 +64,7 @@ public class Monkey {
 	public long getAttackSpeed() {
 		return attackSpeed;
 	}
-	public void setAttackSpeed(long attackSpeed) {
+	public void setAttackSpeed(int attackSpeed) {
 		this.attackSpeed = attackSpeed;
 	}
 	public int getCost() {
@@ -173,6 +174,10 @@ public class Monkey {
 		return name;
 	}
 	
+	public int getSellPrice() {
+		return sellPrice;
+	}
+	
 }
 
 class DartMonkey extends Monkey{
@@ -181,14 +186,20 @@ class DartMonkey extends Monkey{
 		super(250, 100, 1, 30, x, y, currFrame);
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
+		sellPrice = 200;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			pierce = 2;
+			sellPrice = 368;
 		}
 		if(upgradesPurchased[1]) {
 			range = 125;
+			sellPrice = 280;
+		}
+		if(upgradesPurchased[0] && upgradesPurchased[1]) {
+			sellPrice = 448;
 		}
 	}
 
@@ -200,14 +211,20 @@ class TackShooter extends Monkey{
 		super(400, 70, 1, 30, x, y, currFrame);
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
+		sellPrice = 320;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			// increase attack speed
+			sellPrice = 520;
 		}
 		if(upgradesPurchased[1]) {
 			range = 80;
+			sellPrice = 440;
+		}
+		if(upgradesPurchased[0] && upgradesPurchased[1]) {
+			sellPrice = 640;
 		}
 	}
 	
@@ -219,14 +236,20 @@ class IceMonkey extends Monkey{
 		super(850, 70, 1, 30, x, y, currFrame);
 
 		upgradeCosts = new int[] {250, 150};
+		sellPrice = 680;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			//long freeze time
+			sellPrice = 880;
 		}
 		if(upgradesPurchased[1]) {
 			range = 75;
+			sellPrice = 800;	
+		}
+		if(upgradesPurchased[0] && upgradesPurchased[1]) {
+			sellPrice = 1000;
 		}
 	}
 	
@@ -237,14 +260,20 @@ class BombTower extends Monkey{
 	public BombTower(int x, int y, int currFrame) {
 		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
 		upgradeCosts = new int[] {210, 100};
+		sellPrice = 720;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			//bigger projectile
+			// update sell price 
 		}
 		if(upgradesPurchased[1]) {
 			range = 140;
+			// update sell price 
+		}
+		if(upgradesPurchased[0] && upgradesPurchased[1]) {
+			// update sell price 
 		}
 	}
 
@@ -255,14 +284,17 @@ class SuperMonkey extends Monkey{
 	public SuperMonkey(int x, int y, int currFrame) {
 		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
 		upgradeCosts = new int[] {210, 100};
+		sellPrice = 3200;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			pierce = 10; 
+			// update sell price 
 		}
 		if(upgradesPurchased[1]) {
 			range = 175;
+			// update sell price 
 		}
 	}
 
