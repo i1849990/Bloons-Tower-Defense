@@ -195,6 +195,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.setColor(new Color(162, 216, 162));
 		g.fillRect(600, 500, 182, 63);
 		
+		
 	}
 	
 	public boolean[] mouseHoveringUpgrades() {
