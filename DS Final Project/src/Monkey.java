@@ -251,6 +251,7 @@ class TackShooter extends Monkey{
 		super(400, 70, 1, 30, x, y, currFrame);
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
+		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range Tacks"};
 		sellPrice = 320;
 	}
 	
@@ -279,6 +280,7 @@ class IceMonkey extends Monkey{
 		super(850, 70, 1, 30, x, y, currFrame);
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
+		upgradeDescriptions = new String[] {"Long Freeze Time", "Wide Freeze Radius"};
 		sellPrice = 680;
 	}
 	
@@ -307,6 +309,7 @@ class BombTower extends Monkey{
 		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
+		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range Bombs"};
 		sellPrice = 720;
 	}
 	
@@ -335,6 +338,7 @@ class SuperMonkey extends Monkey{
 		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
 		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
+		upgradeDescriptions = new String[] {"Laser Blasts", "Epic Range"};
 		sellPrice = 3200;
 	}
 	
