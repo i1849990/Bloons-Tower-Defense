@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -103,7 +104,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void drawMenuGUI(Graphics g) {
-		selectedMonkey = new BombTower(300,300, 0);
+		selectedMonkey = new IceMonkey(300, 300, 0);
 		selectedMonkey.upgradesPurchased[1] = true; 
 		if(selectedMonkey == null) {
 			return;
@@ -211,21 +212,28 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 				break;
 			}
 			
+			// upgrade box color
 			g.setColor(upgradeColors[i]);
 			g.fillRect(605 + 88 * i, 274, 85, 180);
 			
+			// upgrade images
+			g.drawImage(selectedMonkey.getUpgradeImages()[i],605 + 88 * i,274,this);
+			
+			// upgrade affording status
 			g.setColor(textColors[i]);
 			g.setFont(bold);
 			g.drawString(guiStatus0, 610 + 88 * i + xOffset0, yOffset);
 			g.drawString(guiStatus1, 610 + 88 * i + xOffset1, yOffset + 20);
 			
+			// upgrade costs
 			g.setColor(new Color(238, 255, 243));
 			g.drawString("" + selectedMonkey.upgradeCosts[i], 633 + 88 * i, 445);
+			
+			// upgrade descriptions
+			g.setFont(small);
+			g.setColor(new Color(218, 240, 218));
+			drawStringMultiLine((Graphics2D) g, selectedMonkey.upgradeDescriptions[i], 70, 615 + 88 * i, 360);
 		}
-		
-		// draw upgrade images here
-		g.drawImage(selectedMonkey.getUpgradeImages()[0],605,274,this);
-		g.drawImage(selectedMonkey.getUpgradeImages()[1],693,274,this);
 		
 		// sell button
 		g.setColor(new Color(168, 70, 46));
@@ -354,6 +362,30 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	// copied from stack overflow imma be honest
+	// https://stackoverflow.com/questions/4413132/problems-with-newline-in-graphics2d-drawstring
+	public void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
+	    FontMetrics m = g.getFontMetrics();
+	    if(m.stringWidth(text) < lineWidth) {
+	        g.drawString(text, x, y);
+	    } else {
+	        String[] words = text.split(" ");
+	        String currentLine = words[0];
+	        for(int i = 1; i < words.length; i++) {
+	            if(m.stringWidth(currentLine+words[i]) < lineWidth) {
+	                currentLine += " "+words[i];
+	            } else {
+	                g.drawString(currentLine, x, y);
+	                y += m.getHeight();
+	                currentLine = words[i];
+	            }
+	        }
+	        if(currentLine.trim().length() > 0) {
+	            g.drawString(currentLine, x, y);
+	        }
+	    }
 	}
 
 }

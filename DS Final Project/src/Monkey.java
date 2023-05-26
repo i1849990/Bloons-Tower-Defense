@@ -222,7 +222,7 @@ class DartMonkey extends Monkey{
 		super(250, 100, 1, 30, x, y, currFrame);
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
-		upgradeDescriptions = new String[] {"Piercing Darts", "Long Range Darts"};
+		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
 		sellPrice = 200;
 	}
 	
@@ -251,7 +251,7 @@ class TackShooter extends Monkey{
 		super(400, 70, 1, 30, x, y, currFrame);
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
-		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range Tacks"};
+		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
 		sellPrice = 320;
 	}
 	
@@ -280,7 +280,7 @@ class IceMonkey extends Monkey{
 		super(850, 70, 1, 30, x, y, currFrame);
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
-		upgradeDescriptions = new String[] {"Long Freeze Time", "Wide Freeze Radius"};
+		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
 		sellPrice = 680;
 	}
 	
@@ -309,7 +309,7 @@ class BombTower extends Monkey{
 		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
-		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range Bombs"};
+		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
 		sellPrice = 720;
 	}
 	
