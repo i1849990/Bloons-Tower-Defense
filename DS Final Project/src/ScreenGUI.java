@@ -255,8 +255,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Trebuchet MS", 1, 30));
 		g.drawString("Start Round", 608, 540);
-		
-		
 	}
 	
 	public boolean[] mouseHoveringUpgrades() {
@@ -290,7 +288,15 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		return Math.pow(mouseX - circleX, 2) + Math.pow(mouseY - circleY, 2) <= Math.pow(radius, 2);
 	}
 	
-	//private boolean mouseClickedOnUpgrades
+	private boolean mouseClickedOnUpgrade0() {
+		Rectangle left = new Rectangle(605, 274, 85, 180);
+		return left.contains(mouseX, mouseY);
+	}
+	
+	private boolean mouseClickedOnUpgrade1() {
+		Rectangle right = new Rectangle(693, 274, 85, 180);
+		return right.contains(mouseX, mouseY);
+	}
 	
 	private Monkey monkeyClickedOn() {
 		for(Monkey m : game.monkeys) {
@@ -329,17 +335,20 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		// handle clicks on screengui, then monkeys
-		
-		if(getMonkeyButtonClickedOn() != null) {
-			selectedMonkey = null;
-		}else if (monkeyClickedOn() != null){
-			selectedMonkey = monkeyClickedOn();
-		}else {
-			selectedMonkey = null;
+		handleSelectedMonkey();
+		if(mouseClickedOnUpgrade0()) {
+			
 		}
-		
 	}
-
+	
+	public void handleSelectedMonkey() {
+		if(mouseClickedOnUpgrade0() || mouseClickedOnUpgrade1()) {
+			// do nothing, selected monkey should still be the same
+		}else {
+			selectedMonkey = monkeyClickedOn();
+		}
+	}
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
