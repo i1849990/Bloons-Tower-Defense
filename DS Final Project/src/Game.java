@@ -13,6 +13,7 @@ public class Game {
 	Track track;
 	
 	private long currFrame;
+	boolean roundInProgress;
 	
 	public Game(Track track) {
 		cash = 650;
@@ -20,6 +21,8 @@ public class Game {
 		round = 1;
 		this.track = track;
 		currFrame = 0;
+		
+		roundInProgress = false;
 		
 		Bloon.initializeImages();
 		Monkey.initializeImages();

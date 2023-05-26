@@ -103,7 +103,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void drawMenuGUI(Graphics g) {
-		selectedMonkey = new SuperMonkey(300,300, 0);
+		selectedMonkey = new BombTower(300,300, 0);
+		selectedMonkey.upgradesPurchased[1] = true; 
 		if(selectedMonkey == null) {
 			return;
 		}
@@ -164,31 +165,62 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		}
 		
 		int range = selectedMonkey.getRange();
-		g.drawString(""+range, 710, height1);
+		g.drawString("" + range, 710, height1);
 		
 		Color[] upgradeColors = new Color[2];
+		Color[] textColors = new Color[2];
 		String[] upgradeStatus = selectedMonkey.getUpgradeStatus(game.cash);
 		
 		for(int i = 0; i < 2; i++) {
+			String guiStatus0 = "";
+			String guiStatus1 = "";
+			int xOffset0 = 0;
+			int xOffset1 = 0;
+			int yOffset = 0;
+			
 			switch(upgradeStatus[i]) {
 			case "purchased":
 				upgradeColors[i] = new Color(51, 204, 51);
+				textColors[i] = new Color(172, 225, 175);
+				guiStatus0 = "Already";
+				guiStatus1 = "Bought";
+				yOffset = 400;
+				xOffset0 = 3;
+				xOffset1 = 5;
 				break;
 			case "purchasable":
 				if(mouseHoveringUpgrades()[i]) {
 					upgradeColors[i] = new Color(74, 240, 74);
+					textColors[i] = new Color(172, 249, 175);
 				}else {
 					upgradeColors[i] = new Color(74, 180, 74);
+					textColors[i] = new Color(172, 225, 175);
 				}
+				guiStatus0 = "Buy for:";
+				xOffset0 = 2;
+				yOffset = 420;
 				break;
 			case "unpurchasable":
 				upgradeColors[i] = new Color(167, 58, 45);
+				textColors[i] = new Color(172, 225, 175);
+				guiStatus0 = "Can't";
+				guiStatus1 = "Afford";
+				xOffset0 = 15;
+				xOffset1 = 8;
+				yOffset = 400;
 				break;
 			}
+			
 			g.setColor(upgradeColors[i]);
 			g.fillRect(605 + 88 * i, 274, 85, 180);
 			
+			g.setColor(textColors[i]);
+			g.setFont(bold);
+			g.drawString(guiStatus0, 610 + 88 * i + xOffset0, yOffset);
+			g.drawString(guiStatus1, 610 + 88 * i + xOffset1, yOffset + 20);
 			
+			g.setColor(new Color(238, 255, 243));
+			g.drawString("" + selectedMonkey.upgradeCosts[i], 633 + 88 * i, 445);
 		}
 		
 		// draw upgrade images here
@@ -199,9 +231,22 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.setColor(new Color(168, 70, 46));
 		g.fillRect(605, 460, 173, 29);
 		
+		// "Sell for:" text
+		g.setColor(new Color(210, 180, 164));
+		g.drawString("Sell for:", 620, 481);
+		
+		// sell price text
+		g.setColor(new Color(238, 255, 243));
+		g.drawString("" + selectedMonkey.getSellPrice(), 715, 481);
+		
 		// round start button
 		g.setColor(new Color(162, 216, 162));
 		g.fillRect(600, 500, 182, 63);
+		
+		// "Start Round" text
+		g.setColor(new Color(255, 255, 255));
+		g.setFont(new Font("Trebuchet MS", 1, 30));
+		g.drawString("Start Round", 608, 540);
 		
 		
 	}

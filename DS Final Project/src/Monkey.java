@@ -347,7 +347,7 @@ class SuperMonkey extends Monkey{
 			sellPrice = 5120;
 		}
 		if(upgradesPurchased[0] && upgradesPurchased[1]) {
-			
+			sellPrice = 8720;
 		}
 	}
 	
