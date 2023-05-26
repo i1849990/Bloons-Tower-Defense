@@ -223,6 +223,7 @@ class DartMonkey extends Monkey{
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
 		sellPrice = 200;
+		super.hitbox = new Rectangle(x,y, 99, 91);
 	}
 	
 	public void updateUpgrades() {
@@ -251,6 +252,7 @@ class TackShooter extends Monkey{
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
 		sellPrice = 320;
+		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
 	
 	public void updateUpgrades() {
@@ -279,6 +281,7 @@ class IceMonkey extends Monkey{
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
 		sellPrice = 680;
+		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
 	
 	public void updateUpgrades() {
@@ -307,6 +310,7 @@ class BombTower extends Monkey{
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
 		sellPrice = 720;
+		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
 	
 	public void updateUpgrades() {
@@ -335,6 +339,7 @@ class SuperMonkey extends Monkey{
 		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
 		sellPrice = 3200;
+		super.hitbox = new Rectangle(x,y, 115, 107);
 	}
 	
 	public void updateUpgrades() {
