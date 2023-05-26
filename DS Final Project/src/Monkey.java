@@ -312,7 +312,7 @@ class BombTower extends Monkey{
 		sellPrice = 720;
 		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
-	
+	 
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			//bigger projectile
