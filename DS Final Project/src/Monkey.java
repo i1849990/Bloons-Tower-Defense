@@ -222,6 +222,7 @@ class DartMonkey extends Monkey{
 		super(250, 100, 1, 30, x, y, currFrame);
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
+		upgradeDescriptions = new String[] {"Piercing Darts", "Long Range Darts"};
 		sellPrice = 200;
 	}
 	
