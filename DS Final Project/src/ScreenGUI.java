@@ -28,6 +28,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	BufferedImage map;
 	private Monkey selectedMonkey;
 	private String monkeyToBePlaced;
+	int currFrame;
 	
 	long sum; int nums;
 	
@@ -57,9 +58,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			e.printStackTrace();
 		}
 		
-		selectedMonkey = new IceMonkey(300, 300, 0);
-		selectedMonkey.upgradesPurchased[1] = true; 
-		
+		currFrame = 0;
 	}
 	
 	public void paint(Graphics g) {
@@ -276,17 +275,67 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			return;
 		}
 		
+		int width = 30;
+		int height = 30;
+		
+		// test:
+		g.setColor(Color.blue);
+		g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
+		
+		if(!isValidSpotToPlace()) {
+			Color transparentRed = new Color(255, 0, 0, 100);
+			g.setColor(transparentRed);
+		}else {
+			Color transparentWhite = new Color(255, 255, 255, 100);
+			g.setColor(transparentWhite);
+		}
+		
 		int radius = game.getDisplayRange(monkeyToBePlaced);
-		Color transparentWhite = new Color(255, 255, 255, 100);
-		g.setColor(transparentWhite);
 		g.fillOval(mouseX - radius, mouseY - radius, radius * 2, radius * 2);
+		//g.drawImage(image, mouseX - imageWidth / 2, mouseY - imageHeight / 2, this);
+	}
+	
+	private void addMonkeyToBePlaced() {
+		Monkey m = null;
+		int width = 30;
+		int height = 30;
+		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
+		switch(monkeyToBePlaced) {
+		case"dart":
+			m = new DartMonkey(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			break;
+		case"tack":
+			m = new TackShooter(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			break;
+		case"ice":
+			m = new IceMonkey(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			break;
+		case"bomb":
+			m = new BombTower(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			break;
+		case"super":
+			m = new SuperMonkey(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			break;
+		}
+		
+		game.addMonkey(m);
+		selectedMonkey = m;
+		monkeyToBePlaced = null;
+	}
+	
+	private boolean isValidSpotToPlace() {
+		int width = 30;
+		int height = 30;
+		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
+		
+		return !game.intersectsObjects(toBePlacedHitbox) && mouseX <= 580;
 	}
 	
 	public boolean[] mouseHoveringUpgrades() {
 		Rectangle rect0 = new Rectangle(605, 274, 85, 180);
 		Rectangle rect1 = new Rectangle(693, 274, 85, 180);
 		if(rect0.contains(mouseX, mouseY)) {
-			return  new boolean[] {true, false};
+			return new boolean[] {true, false};
 		}else if(rect1.contains(mouseX, mouseY)) {
 			return new boolean[] {false, true};
 		}else {
@@ -346,6 +395,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == t) { 
+			currFrame++;
 			repaint();
 		}
 		
@@ -380,7 +430,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		}
 		
 		if(mouseClickedOnSell()) {
-			System.out.println("test");
 			game.sellMonkey(selectedMonkey);
 			selectedMonkey = null;
 		}
@@ -389,8 +438,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			game.tryToAdvanceRound();
 		}
 		
-		if(getMonkeyButtonClickedOn() != null) {
-			monkeyToBePlaced = getMonkeyButtonClickedOn();
+		String buttonClicked = getMonkeyButtonClickedOn();
+		if(buttonClicked != null) {
+			System.out.println(game.canAffordTower(buttonClicked));
+			monkeyToBePlaced = buttonClicked;
+		}
+		
+		if(isValidSpotToPlace()) {
+			addMonkeyToBePlaced();
 		}
 	}
 	

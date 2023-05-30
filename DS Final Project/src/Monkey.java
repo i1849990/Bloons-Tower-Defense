@@ -26,16 +26,17 @@ public class Monkey {
 	protected boolean[] upgradesPurchased; // are upgrades purchased
 	protected int lastAttackFrame;
 	protected int sellPrice;
+	public int[] towerWidth;
 	
-	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame) {
+	
+	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame, Rectangle hitbox) {
 		pierce = pPierce;
 		cost = pCost;
 		range = pRange;
 		attackSpeed = pAttackSpeed;
-		
 		upgradesPurchased = new boolean[]{false, false};
-		
 		lastAttackFrame = currFrame;
+		this.hitbox = hitbox;
 	}
 	
 	public static void initializeImages() {
@@ -234,8 +235,8 @@ public class Monkey {
 
 class DartMonkey extends Monkey{
 
-	public DartMonkey(int x, int y, int currFrame) {
-		super(250, 100, 1, 30, x, y, currFrame);
+	public DartMonkey(int x, int y, int currFrame, Rectangle hitbox) {
+		super(250, 100, 1, 30, x, y, currFrame, hitbox);
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
 		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
@@ -263,8 +264,8 @@ class DartMonkey extends Monkey{
 
 class TackShooter extends Monkey{
 
-	public TackShooter(int x, int y, int currFrame) {
-		super(400, 70, 1, 30, x, y, currFrame);
+	public TackShooter(int x, int y, int currFrame, Rectangle hitbox) {
+		super(400, 70, 1, 30, x, y, currFrame, hitbox);
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
@@ -292,8 +293,8 @@ class TackShooter extends Monkey{
 
 class IceMonkey extends Monkey{
 
-	public IceMonkey(int x, int y, int currFrame) {
-		super(850, 70, 1, 30, x, y, currFrame);
+	public IceMonkey(int x, int y, int currFrame, Rectangle hitbox) {
+		super(850, 70, 1, 30, x, y, currFrame, hitbox);
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
@@ -321,8 +322,8 @@ class IceMonkey extends Monkey{
 
 class BombTower extends Monkey{
 
-	public BombTower(int x, int y, int currFrame) {
-		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
+	public BombTower(int x, int y, int currFrame, Rectangle hitbox) {
+		super(900, 120, 1, 30, x, y, currFrame, hitbox); //customize pierce
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
 		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
@@ -350,8 +351,8 @@ class BombTower extends Monkey{
 
 class SuperMonkey extends Monkey{
 
-	public SuperMonkey(int x, int y, int currFrame) {
-		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
+	public SuperMonkey(int x, int y, int currFrame, Rectangle hitbox) {
+		super(4000, 140, 1, 30, x, y, currFrame, hitbox); //get atk spd frames
 		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
 		upgradeDescriptions = new String[] {"Laser Blasts", "Epic Range"};

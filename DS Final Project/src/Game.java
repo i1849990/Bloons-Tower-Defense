@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +28,8 @@ public class Game {
 		
 		Bloon.initializeImages();
 		Monkey.initializeImages();
+		
+		//bloons.add(new Bloon(track, 0));
 	}
 	
 	public void nextFrame() {
@@ -157,6 +161,43 @@ public class Game {
 		return 0;
 	}
 	
+	public boolean intersectsObjects(Rectangle r) {
+		for(Monkey m : monkeys) {
+			if(r.intersects(m.hitbox)) {
+				return true;
+			}
+		}
+		
+		return track.intersectsRect((Rectangle2D) r);
+	}
+	
+	public void addMonkey(Monkey m) {
+		monkeys.add(m);
+		cash -= m.getCost();
+	}
+	
+	public boolean canAffordTower(String str) {
+		int cost = 0;
+		switch(str) {
+		case"dart":
+			cost = 250;
+			break;
+		case"tack":
+			cost = 400;
+			break;
+		case"ice":
+			cost = 850;
+			break;
+		case"bomb":
+			cost = 900;
+			break;
+		case"super":
+			cost = 4000;
+			break;
+		}
+		return cost <= cash;
+	}
+	
 	public boolean getRoundInProgress() {
 		return roundInProgress;
 	}
@@ -172,5 +213,6 @@ public class Game {
 	public int getCash() {
 		return cash;
 	}
+	
 }
  
