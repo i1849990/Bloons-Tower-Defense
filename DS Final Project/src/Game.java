@@ -135,9 +135,26 @@ public class Game {
 	public void sellMonkey(Monkey m) {
 		if(m != null) {
 			cash += m.getSellPrice();
-			System.out.println(m.getSellPrice());
 			monkeys.remove(m);
 		}
+	}
+	
+	// used to display the range of a tower that is going to be placed for ScreenGUI
+	public int getDisplayRange(String monkeyName) {
+		switch(monkeyName) {
+		case"dart":
+			return 100;
+		case"tack":
+			return 70;
+		case"ice":
+			return 70;
+		case"bomb":
+			return 120;
+		case"super":
+			return 140;
+		}
+		
+		return 0;
 	}
 	
 	public boolean getRoundInProgress() {

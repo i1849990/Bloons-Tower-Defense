@@ -27,6 +27,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	BufferedImage map;
 	private Monkey selectedMonkey;
+	private String monkeyToBePlaced;
 	
 	long sum; int nums;
 	
@@ -72,6 +73,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeys(g);
 		drawBloons(g);
 		drawGUI(g);
+		drawMonkeyToBePlaced(g);
 		
 		if (nums == 100) {
 			System.out.println(sum / 100);
@@ -269,6 +271,17 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		}
 	}
 	
+	public void drawMonkeyToBePlaced(Graphics g){
+		if(monkeyToBePlaced == null) {
+			return;
+		}
+		
+		int radius = game.getDisplayRange(monkeyToBePlaced);
+		Color transparentWhite = new Color(255, 255, 255, 100);
+		g.setColor(transparentWhite);
+		g.fillOval(mouseX - radius, mouseY - radius, radius * 2, radius * 2);
+	}
+	
 	public boolean[] mouseHoveringUpgrades() {
 		Rectangle rect0 = new Rectangle(605, 274, 85, 180);
 		Rectangle rect1 = new Rectangle(693, 274, 85, 180);
@@ -374,6 +387,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		if(mouseClickedOnNextRound()) {
 			game.tryToAdvanceRound();
+		}
+		
+		if(getMonkeyButtonClickedOn() != null) {
+			monkeyToBePlaced = getMonkeyButtonClickedOn();
 		}
 	}
 	
