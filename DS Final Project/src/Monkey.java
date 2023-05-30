@@ -214,6 +214,22 @@ public class Monkey {
 	public BufferedImage[] getUpgradeImages() {
 		return null;
 	}
+	
+	// meant to be overriden
+	public void updateUpgrades() {
+		
+	}
+	
+	public void purchaseUpgrade0() {
+		upgradesPurchased[0] = true;
+		updateUpgrades();
+	}
+	
+	public void purchaseUpgrade1() {
+		upgradesPurchased[1] = true;
+		updateUpgrades();
+	}
+	
 }
 
 class DartMonkey extends Monkey{

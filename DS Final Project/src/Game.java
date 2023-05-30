@@ -43,9 +43,15 @@ public class Game {
 		// similar case to bomb explosion
 	}
 	
-	public void advanceRound() {
+	public void tryToAdvanceRound() {
+		if(!roundInProgress) {
+			roundInProgress = true;
+			round++;
+		}
+	}
+	
+	private void endRound() {
 		cash += 100;
-		round++;
 	}
 	
 	public void handleCollisions() {
@@ -109,13 +115,45 @@ public class Game {
 	}
 	
 	public void tryToPurchaseUpgrade0(Monkey m) {
-		if(m.getUpgradeCosts()[0] > cash || m.getUpgradesPurchased()[0]) {
+		if(m.getUpgradeCosts()[0] > cash || m.getUpgradesPurchased()[0] || m == null) {
 			return;
 		}
 		
 		cash -= m.getUpgradeCosts()[0];
-		
+		m.purchaseUpgrade0();
 	}
 	
+	public void tryToPurchaseUpgrade1(Monkey m) {
+		if(m.getUpgradeCosts()[1] > cash || m.getUpgradesPurchased()[1] || m == null) {
+			return;
+		}
+		
+		cash -= m.getUpgradeCosts()[1];
+		m.purchaseUpgrade1();
+	}
+	
+	public void sellMonkey(Monkey m) {
+		if(m != null) {
+			cash += m.getSellPrice();
+			System.out.println(m.getSellPrice());
+			monkeys.remove(m);
+		}
+	}
+	
+	public boolean getRoundInProgress() {
+		return roundInProgress;
+	}
+	
+	public int getRound() {
+		return round;
+	}
+	
+	public int getLives() {
+		return lives;
+	}
+	
+	public int getCash() {
+		return cash;
+	}
 }
  

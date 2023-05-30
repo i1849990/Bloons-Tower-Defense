@@ -56,6 +56,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			e.printStackTrace();
 		}
 		
+		selectedMonkey = new IceMonkey(300, 300, 0);
+		selectedMonkey.upgradesPurchased[1] = true; 
+		
 	}
 	
 	public void paint(Graphics g) {
@@ -100,12 +103,11 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void drawGUI(Graphics g) {
+		drawMonkeyGUI(g);
 		drawMenuGUI(g);
 	}
 	
-	public void drawMenuGUI(Graphics g) {
-		selectedMonkey = new IceMonkey(300, 300, 0);
-		selectedMonkey.upgradesPurchased[1] = true; 
+	public void drawMonkeyGUI(Graphics g) {
 		if(selectedMonkey == null) {
 			return;
 		}
@@ -170,7 +172,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		Color[] upgradeColors = new Color[2];
 		Color[] textColors = new Color[2];
-		String[] upgradeStatus = selectedMonkey.getUpgradeStatus(game.cash);
+		String[] upgradeStatus = selectedMonkey.getUpgradeStatus(game.getCash());
 		
 		for(int i = 0; i < 2; i++) {
 			String guiStatus0 = "";
@@ -246,15 +248,25 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// sell price text
 		g.setColor(new Color(238, 255, 243));
 		g.drawString("" + selectedMonkey.getSellPrice(), 715, 481);
+	}
+	
+	public void drawMenuGUI(Graphics g) {
+		// round, cash, lives text
+		g.setFont(new Font("Trebuchet MS", 0, 25));
+		g.drawString("" + game.getRound(), 698, 44);
+		g.drawString("" + game.getCash(), 702, 75);
+		g.drawString("" + game.getLives(), 684, 103);
 		
-		// round start button
-		g.setColor(new Color(162, 216, 162));
-		g.fillRect(600, 500, 182, 63);
-		
-		// "Start Round" text
-		g.setColor(new Color(255, 255, 255));
-		g.setFont(new Font("Trebuchet MS", 1, 30));
-		g.drawString("Start Round", 608, 540);
+		if(!game.getRoundInProgress()){
+			// round start button
+			g.setColor(new Color(162, 216, 162));
+			g.fillRect(600, 500, 182, 63);
+			
+			// "Start Round" text
+			g.setColor(new Color(255, 255, 255));
+			g.setFont(new Font("Trebuchet MS", 1, 30));
+			g.drawString("Start Round", 608, 540);
+		}
 	}
 	
 	public boolean[] mouseHoveringUpgrades() {
@@ -283,9 +295,18 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		return null;
 	}
 	
-	
 	private boolean mouseLiesInCircle(int circleX, int circleY, int radius) {
 		return Math.pow(mouseX - circleX, 2) + Math.pow(mouseY - circleY, 2) <= Math.pow(radius, 2);
+	}
+	
+	private Monkey getMonkeyClickedOn() {
+		for(Monkey m : game.monkeys) {
+			if(m.getHitbox().contains(mouseX, mouseY)) {
+				return m;
+			}
+		}
+		
+		return null;
 	}
 	
 	private boolean mouseClickedOnUpgrade0() {
@@ -298,14 +319,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		return right.contains(mouseX, mouseY);
 	}
 	
-	private Monkey monkeyClickedOn() {
-		for(Monkey m : game.monkeys) {
-			if(m.getHitbox().contains(mouseX, mouseY)) {
-				return m;
-			}
-		}
-		
-		return null;
+	private boolean mouseClickedOnSell() {
+		Rectangle sell = new Rectangle(605, 460, 173, 29);
+		return sell.contains(mouseX, mouseY);
+	}
+	
+	private boolean mouseClickedOnNextRound() {
+		Rectangle nextRound = new Rectangle(600, 500, 182, 63);
+		return nextRound.contains(mouseX, mouseY);
 	}
 	
 	@Override
@@ -318,7 +339,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// magic numbers that returns the mouse's real position
 		mouseX = e.getX() - 6;
 		mouseY = e.getY() - 29;
 		
@@ -336,16 +357,31 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// TODO Auto-generated method stub
 		// handle clicks on screengui, then monkeys
 		handleSelectedMonkey();
+		
 		if(mouseClickedOnUpgrade0()) {
-			
+			game.tryToPurchaseUpgrade0(selectedMonkey);
+		}
+		
+		if(mouseClickedOnUpgrade1()) {
+			game.tryToPurchaseUpgrade1(selectedMonkey);
+		}
+		
+		if(mouseClickedOnSell()) {
+			System.out.println("test");
+			game.sellMonkey(selectedMonkey);
+			selectedMonkey = null;
+		}
+		
+		if(mouseClickedOnNextRound()) {
+			game.tryToAdvanceRound();
 		}
 	}
 	
 	public void handleSelectedMonkey() {
-		if(mouseClickedOnUpgrade0() || mouseClickedOnUpgrade1()) {
+		if(mouseClickedOnUpgrade0() || mouseClickedOnUpgrade1() || mouseClickedOnSell() || mouseClickedOnNextRound()) {
 			// do nothing, selected monkey should still be the same
 		}else {
-			selectedMonkey = monkeyClickedOn();
+			selectedMonkey = getMonkeyClickedOn();
 		}
 	}
 	
