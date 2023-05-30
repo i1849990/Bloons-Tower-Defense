@@ -222,6 +222,7 @@ class DartMonkey extends Monkey{
 		super(250, 100, 1, 30, x, y, currFrame);
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
+		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
 		sellPrice = 200;
 		super.hitbox = new Rectangle(x,y, 99, 91);
 	}
@@ -251,6 +252,7 @@ class TackShooter extends Monkey{
 		super(400, 70, 1, 30, x, y, currFrame);
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
+		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
 		sellPrice = 320;
 		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
@@ -280,6 +282,7 @@ class IceMonkey extends Monkey{
 		super(850, 70, 1, 30, x, y, currFrame);
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
+		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
 		sellPrice = 680;
 		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
@@ -309,6 +312,7 @@ class BombTower extends Monkey{
 		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
+		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
 		sellPrice = 720;
 		super.hitbox = new Rectangle(x,y, 100, 100);
 	}
@@ -338,6 +342,7 @@ class SuperMonkey extends Monkey{
 		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
 		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
+		upgradeDescriptions = new String[] {"Laser Blasts", "Epic Range"};
 		sellPrice = 3200;
 		super.hitbox = new Rectangle(x,y, 115, 107);
 	}

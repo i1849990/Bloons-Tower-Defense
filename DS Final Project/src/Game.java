@@ -108,5 +108,14 @@ public class Game {
 		
 	}
 	
+	public void tryToPurchaseUpgrade0(Monkey m) {
+		if(m.getUpgradeCosts()[0] > cash || m.getUpgradesPurchased()[0]) {
+			return;
+		}
+		
+		cash -= m.getUpgradeCosts()[0];
+		
+	}
+	
 }
  
