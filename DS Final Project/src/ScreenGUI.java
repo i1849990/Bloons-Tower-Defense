@@ -75,7 +75,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeyToBePlaced(g);
 		
 		if (nums == 100) {
-			System.out.println(sum / 100);
+			//System.out.println(sum / 100);
 			nums = 1;
 			sum = (System.currentTimeMillis() - time);
 		}else {
@@ -328,7 +328,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		int height = 30;
 		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
 		
-		return !game.intersectsObjects(toBePlacedHitbox) && mouseX <= 580;
+		return !game.intersectsObjects(toBePlacedHitbox) && mouseX <= 550 && mouseY <= 550;
 	}
 	
 	public boolean[] mouseHoveringUpgrades() {
@@ -440,11 +440,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		String buttonClicked = getMonkeyButtonClickedOn();
 		if(buttonClicked != null) {
-			System.out.println(game.canAffordTower(buttonClicked));
 			monkeyToBePlaced = buttonClicked;
 		}
 		
-		if(isValidSpotToPlace()) {
+		if(monkeyToBePlaced != null && isValidSpotToPlace()) {
 			addMonkeyToBePlaced();
 		}
 	}
