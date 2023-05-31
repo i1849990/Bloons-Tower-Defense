@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -92,27 +94,37 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void drawMonkeys(Graphics g) {
 		for(Monkey m : game.monkeys) {
 			m.updateImage(currFrame);
-			// TODO: figure out how to rotate images with AffineTransform
-			Image toDraw = null;
+			double rotation =  m.getRotation();
 			
+			//test: 
+			BufferedImage toDraw = null;
 			switch(m.getName()) {
 			case"Dart Monkey":
-				toDraw = m.getImage().getScaledInstance(49, 45, Image.SCALE_DEFAULT);
+				toDraw = getScaledInstance(m.getImage(), 49, 45);
+				break;
+			case"Tack Shooter":
+				rotation = 0;
+				toDraw =  m.getImage();
+				break;
+			case"Ice Monkey":
+				rotation = 0;
+				toDraw =  m.getImage();
+				break;
+			case"Bomb Tower":
+				toDraw =  m.getImage();
 				break;
 			case"Super Monkey":
-				toDraw = m.getImage().getScaledInstance(57, 53, Image.SCALE_DEFAULT);
-				break;
-			default:
-				toDraw = (Image) m.getImage();
+				toDraw = getScaledInstance(m.getImage(), 57, 53);
 				break;
 			}
-			g.drawImage(toDraw,m.getX(), m.getY(), this);
+			
+			toDraw = rotate(toDraw, rotation);
+			g.drawImage((Image) toDraw,m.getX(), m.getY(), this);
 		}
 	}
 	
 	public void drawBloons(Graphics g) {
 		for (Bloon b : game.bloons) {
-			System.out.println(b.getX() + " " + b.getY());
 			g.drawImage(b.getImage(), b.getX(), b.getY(), this);
 		}
 	}
@@ -520,7 +532,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	// copied from stack overflow imma be honest
-	// https://stackoverflow.com/questions/4413132/problems-with-newline-in-graphics2d-drawstring
+	// https://stackoverflow.com/a/19864657
 	public void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 	    FontMetrics m = g.getFontMetrics();
 	    if(m.stringWidth(text) < lineWidth) {
@@ -542,5 +554,38 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	        }
 	    }
 	}
+	
+	
+	// also copied from stack overflow cause I don't know how to rotate an image
+	// https://stackoverflow.com/a/68926993
+	// - modified to take in radians instead of degrees
+	public static BufferedImage rotate(BufferedImage bimg, Double angle) {
+	    double sin = Math.abs(Math.sin(angle)),
+	           cos = Math.abs(Math.cos(angle));
+	    int w = bimg.getWidth();
+	    int h = bimg.getHeight();
+	    int neww = (int) Math.floor(w*cos + h*sin),
+	        newh = (int) Math.floor(h*cos + w*sin);
+	    BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+	    Graphics2D graphic = rotated.createGraphics();
+	    graphic.translate((neww-w)/2, (newh-h)/2);
+	    graphic.rotate(angle, w/2, h/2);
+	    graphic.drawRenderedImage(bimg, null);
+	    graphic.dispose();
+	    return rotated;
+	}
+	
+	// copied from random github repo
+	// https://github.com/nguyenq/tess4j/blob/master/src/main/java/net/sourceforge/tess4j/util/ImageHelper.java
+    public static BufferedImage getScaledInstance(BufferedImage image, int targetWidth, int targetHeight) {
+        int type = (image.getTransparency() == Transparency.OPAQUE)
+                ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage tmp = new BufferedImage(targetWidth, targetHeight, type);
+        Graphics2D g2 = tmp.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2.drawImage(image, 0, 0, targetWidth, targetHeight, null);
+        g2.dispose();
+        return tmp;
+    }
 
 }
