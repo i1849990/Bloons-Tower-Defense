@@ -26,8 +26,6 @@ public class Monkey {
 	protected boolean[] upgradesPurchased; // are upgrades purchased
 	protected int lastAttackFrame;
 	protected int sellPrice;
-	public int[] towerWidth;
-	
 	
 	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame, Rectangle hitbox) {
 		pierce = pPierce;
@@ -270,6 +268,10 @@ class TackShooter extends Monkey{
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
 		sellPrice = 320;
+	}
+	
+	public void initialize() {
+		BufferedImage tackPNG
 	}
 	
 	public void updateUpgrades() {
