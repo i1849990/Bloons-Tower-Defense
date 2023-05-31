@@ -312,13 +312,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		if(monkeyToBePlaced == null) {
 			return;
 		}
-		
 		int width = 30;
 		int height = 30;
-		
-		// test:
-		g.setColor(Color.blue);
-		g.drawRect(mouseX - width / 2, mouseY - height / 2, width, height);
 		
 		if(!isValidSpotToPlace()) {
 			Color transparentRed = new Color(255, 0, 0, 100);
@@ -330,7 +325,40 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		int radius = game.getDisplayRange(monkeyToBePlaced);
 		g.fillOval(mouseX - radius, mouseY - radius, radius * 2, radius * 2);
-		//g.drawImage(image, mouseX - imageWidth / 2, mouseY - imageHeight / 2, this);
+		
+		Image img = null;
+		int imageW = 0;
+		int imageH = 0;
+		
+		switch(monkeyToBePlaced) {
+		case"dart":
+			imageW = 49;
+			imageH = 45;
+			img = getScaledInstance(DartMonkey.images[0],49,45);
+			break;
+		case"tack":
+			imageW = TackShooter.images[0].getWidth();
+			imageH = TackShooter.images[0].getHeight();
+			img = TackShooter.images[0];
+			break;
+		case"ice":
+			imageW = IceMonkey.images[0].getWidth();
+			imageH = IceMonkey.images[0].getHeight();
+			img = IceMonkey.images[0];
+			break;
+		case"bomb":
+			imageW = BombTower.images[0].getWidth();
+			imageH = BombTower.images[0].getHeight();
+			img = BombTower.images[0];
+			break;
+		case"super":
+			imageW = 57;
+			imageH = 53;
+			img = getScaledInstance(SuperMonkey.images[0],57,53);
+			break;
+		}
+		
+		g.drawImage(img, mouseX - imageW / 2, mouseY - imageH / 2, this);
 	}
 	
 	private void addMonkeyToBePlaced() {
