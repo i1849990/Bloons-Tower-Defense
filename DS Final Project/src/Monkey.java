@@ -1,3 +1,4 @@
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -70,6 +71,7 @@ public class Monkey {
 			upgradeImages[4][1] = ImageIO.read(file);
 			
 			TackShooter.initialize();
+			DartMonkey.initialize();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -241,6 +243,8 @@ class DartMonkey extends Monkey{
 
 	public DartMonkey(int x, int y, int currFrame, Rectangle hitbox) {
 		super(250, 100, 1, 30, x, y, currFrame, hitbox);
+		centeredX = x + 49 / 2;
+		centeredY = y + 45 / 2;
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
 		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
@@ -251,7 +255,7 @@ class DartMonkey extends Monkey{
 	public void updateImage(int currFrame) {
 		int framesPassed = currFrame - lastAttackFrame;
 		
-		if(framesPassed >= images.length * delayBetweenFrames) {
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
 			image = images[0];
 			return;
 		}
@@ -275,14 +279,15 @@ class DartMonkey extends Monkey{
 	
 	public static void initialize() {
 		try {
-			images = new BufferedImage[5];
+			images = new BufferedImage[10];
 			File file;
 			
 			file = new File("DMonkey.png");
 			BufferedImage dartSprites = ImageIO.read(file);
 			
-			for(int i = 0; i < 5; i++) {
-				
+			for(int i = 0; i < 10; i++) {
+				BufferedImage original = dartSprites.getSubimage(99 * (i % 5), 92 * (i / 5), 98, 90);
+				images[i] = original;
 			}
 			
 		} catch (IOException e) {
@@ -301,6 +306,8 @@ class TackShooter extends Monkey{
 
 	public TackShooter(int x, int y, int currFrame, Rectangle hitbox) {
 		super(400, 70, 1, 30, x, y, currFrame, hitbox);
+		centeredX = x + 50 / 2;
+		centeredY = y + 50 / 2;
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
@@ -357,6 +364,7 @@ class TackShooter extends Monkey{
 }
 
 class IceMonkey extends Monkey{
+	public static BufferedImage[] images;
 
 	public IceMonkey(int x, int y, int currFrame, Rectangle hitbox) {
 		super(850, 70, 1, 30, x, y, currFrame, hitbox);
@@ -386,6 +394,7 @@ class IceMonkey extends Monkey{
 }
 
 class BombTower extends Monkey{
+	public static BufferedImage[] images;
 
 	public BombTower(int x, int y, int currFrame, Rectangle hitbox) {
 		super(900, 120, 1, 30, x, y, currFrame, hitbox); //customize pierce
@@ -415,6 +424,7 @@ class BombTower extends Monkey{
 }
 
 class SuperMonkey extends Monkey{
+	public static BufferedImage[] images;
 
 	public SuperMonkey(int x, int y, int currFrame, Rectangle hitbox) {
 		super(4000, 140, 1, 30, x, y, currFrame, hitbox); //get atk spd frames

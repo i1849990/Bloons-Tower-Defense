@@ -69,8 +69,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		game.nextFrame();
 		
 		drawBackground(g);
-		drawMonkeys(g);
 		drawBloons(g);
+		drawSelectedMonkeyRange(g);
+		drawMonkeys(g);
 		drawGUI(g);
 		drawMonkeyToBePlaced(g);
 		
@@ -90,9 +91,19 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	public void drawMonkeys(Graphics g) {
 		for(Monkey m : game.monkeys) {
-			// TODO: figure out how to rotate images with AffineTransform
 			m.updateImage(currFrame);
-			g.drawImage(m.getImage(),m.getX(), m.getY(), this);
+			// TODO: figure out how to rotate images with AffineTransform
+			Image toDraw = null;
+			
+			switch(m.getName()) {
+			case"Dart Monkey":
+				toDraw = m.getImage().getScaledInstance(49, 45, Image.SCALE_DEFAULT);
+				break;
+			default:
+				toDraw = (Image) m.getImage();
+				break;
+			}
+			g.drawImage(toDraw,m.getX(), m.getY(), this);
 		}
 	}
 	
@@ -270,6 +281,18 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		}
 	}
 	
+	public void drawSelectedMonkeyRange(Graphics g) {
+		if(selectedMonkey == null) {
+			return;
+		}
+		
+		Color transparentWhite = new Color(255, 255, 255, 100);
+		g.setColor(transparentWhite);
+		
+		int radius = selectedMonkey.getRange();
+		g.fillOval(selectedMonkey.centeredX - radius, selectedMonkey.centeredY - radius, radius * 2, radius * 2);
+	}
+	
 	public void drawMonkeyToBePlaced(Graphics g){
 		if(monkeyToBePlaced == null) {
 			return;
@@ -299,22 +322,35 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		Monkey m = null;
 		int width = 30;
 		int height = 30;
+		
+		int imageW;
+		int imageH;
 		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
 		switch(monkeyToBePlaced) {
 		case"dart":
-			m = new DartMonkey(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
+			imageW = 49;
+			imageH = 45;
+			m = new DartMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"tack":
-			m = new TackShooter(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
+			imageW = TackShooter.images[0].getWidth();
+			imageH = TackShooter.images[0].getHeight();
+			m = new TackShooter(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"ice":
-			m = new IceMonkey(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
+			imageW = IceMonkey.images[0].getWidth();
+			imageH = IceMonkey.images[0].getHeight();
+			m = new IceMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"bomb":
-			m = new BombTower(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
+			imageW = BombTower.images[0].getWidth();
+			imageH = BombTower.images[0].getHeight();
+			m = new BombTower(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"super":
-			m = new SuperMonkey(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
+			imageW = SuperMonkey.images[0].getWidth();
+			imageH = SuperMonkey.images[0].getHeight();
+			m = new SuperMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		}
 		
