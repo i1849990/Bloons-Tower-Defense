@@ -72,6 +72,8 @@ public class Monkey {
 			
 			TackShooter.initialize();
 			DartMonkey.initialize();
+			IceMonkey.initialize();
+			BombTower.initialize();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -326,7 +328,6 @@ class TackShooter extends Monkey{
 	}
 	
 	public static void initialize() {
-		
 		try {
 			images = new BufferedImage[5];
 			File file;
@@ -361,6 +362,8 @@ class TackShooter extends Monkey{
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[1];
 	}
+	
+	
 }
 
 class IceMonkey extends Monkey{
@@ -368,10 +371,13 @@ class IceMonkey extends Monkey{
 
 	public IceMonkey(int x, int y, int currFrame, Rectangle hitbox) {
 		super(850, 70, 1, 30, x, y, currFrame, hitbox);
+		centeredX = x + 50 / 2;
+		centeredY = y + 50 / 2;
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
 		sellPrice = 680;
+		delayBetweenFrames = 3;
 	}
 	
 	public void updateUpgrades() {
@@ -388,6 +394,34 @@ class IceMonkey extends Monkey{
 		}
 	}
 	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[6];
+			File file;
+			
+			file = new File("iceMonkey300x50.png");
+			BufferedImage iceSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 6; i++) {
+				images[i] = iceSprites.getSubimage(50 * i, 0, 50, 50);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
+	}
+	
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[2];
 	}
@@ -402,6 +436,7 @@ class BombTower extends Monkey{
 		upgradeCosts = new int[] {650, 250};
 		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
 		sellPrice = 720;
+		delayBetweenFrames = 3;
 	}
 	
 	public void updateUpgrades() {
@@ -416,6 +451,34 @@ class BombTower extends Monkey{
 		if(upgradesPurchased[0] && upgradesPurchased[1]) {
 			// update sell price 
 		}
+	}
+	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[5];
+			File file;
+			
+			file = new File("bombShooter250x50.png");
+			BufferedImage bombSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 5; i++) {
+				images[i] = bombSprites.getSubimage(50 * i, 0, 50, 50);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
 	}
 	
 	public BufferedImage[] getUpgradeImages() {
@@ -446,6 +509,16 @@ class SuperMonkey extends Monkey{
 		if(upgradesPurchased[0] && upgradesPurchased[1]) {
 			sellPrice = 8720;
 		}
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
 	}
 	
 	public BufferedImage[] getUpgradeImages() {
