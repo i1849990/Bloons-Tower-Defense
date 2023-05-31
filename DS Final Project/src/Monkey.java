@@ -74,6 +74,7 @@ public class Monkey {
 			DartMonkey.initialize();
 			IceMonkey.initialize();
 			BombTower.initialize();
+			SuperMonkey.initialize();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -432,6 +433,8 @@ class BombTower extends Monkey{
 
 	public BombTower(int x, int y, int currFrame, Rectangle hitbox) {
 		super(900, 120, 1, 30, x, y, currFrame, hitbox); //customize pierce
+		centeredX = x + 50 / 2;
+		centeredY = y + 50 / 2;
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
 		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
@@ -491,10 +494,13 @@ class SuperMonkey extends Monkey{
 
 	public SuperMonkey(int x, int y, int currFrame, Rectangle hitbox) {
 		super(4000, 140, 1, 30, x, y, currFrame, hitbox); //get atk spd frames
+		centeredX = x + 57 / 2;
+		centeredY = y + 53 / 2;
 		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
 		upgradeDescriptions = new String[] {"Laser Blasts", "Epic Range"};
 		sellPrice = 3200;
+		delayBetweenFrames = 1;
 	}
 	
 	public void updateUpgrades() {
@@ -508,6 +514,24 @@ class SuperMonkey extends Monkey{
 		}
 		if(upgradesPurchased[0] && upgradesPurchased[1]) {
 			sellPrice = 8720;
+		}
+	}
+	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[15];
+			File file;
+			
+			file = new File("superMonkey579x323.png");
+			BufferedImage superSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 15; i++) {
+				images[i] = superSprites.getSubimage(116 * (i % 5), 108 * (i / 5), 115, 105);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

@@ -99,6 +99,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			case"Dart Monkey":
 				toDraw = m.getImage().getScaledInstance(49, 45, Image.SCALE_DEFAULT);
 				break;
+			case"Super Monkey":
+				toDraw = m.getImage().getScaledInstance(57, 53, Image.SCALE_DEFAULT);
+				break;
 			default:
 				toDraw = (Image) m.getImage();
 				break;
@@ -348,8 +351,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			m = new BombTower(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"super":
-			imageW = SuperMonkey.images[0].getWidth();
-			imageH = SuperMonkey.images[0].getHeight();
+			imageW = 57;
+			imageH = 53;
 			m = new SuperMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
 			break;
 		}
