@@ -91,8 +91,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void drawMonkeys(Graphics g) {
 		for(Monkey m : game.monkeys) {
 			// TODO: figure out how to rotate images with AffineTransform
-			
-			 
+			m.updateImage(currFrame);
+			g.drawImage(m.getImage(),m.getX(), m.getY(), this);
 		}
 	}
 	
@@ -302,19 +302,19 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
 		switch(monkeyToBePlaced) {
 		case"dart":
-			m = new DartMonkey(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			m = new DartMonkey(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"tack":
-			m = new TackShooter(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			m = new TackShooter(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"ice":
-			m = new IceMonkey(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			m = new IceMonkey(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"bomb":
-			m = new BombTower(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			m = new BombTower(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
 			break;
 		case"super":
-			m = new SuperMonkey(mouseX, mouseY, currFrame, toBePlacedHitbox);
+			m = new SuperMonkey(mouseX - width / 2, mouseY - height / 2, currFrame, toBePlacedHitbox);
 			break;
 		}
 		

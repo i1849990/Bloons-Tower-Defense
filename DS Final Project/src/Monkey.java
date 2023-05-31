@@ -15,10 +15,7 @@ public class Monkey {
 	protected int centeredX;
 	protected int centeredY;
 	protected String name;
-	
-	protected BufferedImage image;
 	protected double rotation; // in radians
-	
 	protected Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
 	protected int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
 	protected static BufferedImage[][] upgradeImages; // contains the image icons for the monkey upgrades
@@ -26,8 +23,13 @@ public class Monkey {
 	protected boolean[] upgradesPurchased; // are upgrades purchased
 	protected int lastAttackFrame;
 	protected int sellPrice;
+	protected int delayBetweenFrames;
+	protected BufferedImage image;
+	protected BufferedImage[] images; // meant to be overriden
 	
 	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame, Rectangle hitbox) {
+		this.x = x;
+		this.y = y;
 		pierce = pPierce;
 		cost = pCost;
 		range = pRange;
@@ -66,6 +68,8 @@ public class Monkey {
 			upgradeImages[4][0] = ImageIO.read(file);
 			file = new File("superMonkeyUpgrade1.png");
 			upgradeImages[4][1] = ImageIO.read(file);
+			
+			TackShooter.initialize();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -149,14 +153,6 @@ public class Monkey {
 		this.centeredY = centeredY;
 	}
 
-	public BufferedImage getImage() {
-		return image;
-	}
-
-	public void setImage(BufferedImage image) {
-		this.image = image;
-	}
-
 	public double getRotation() {
 		return rotation;
 	}
@@ -209,6 +205,10 @@ public class Monkey {
 		return sellPrice;
 	}
 	
+	public BufferedImage getImage() {
+		return image;
+	}
+	
 	// returns null, is meant to be overriden
 	public BufferedImage[] getUpgradeImages() {
 		return null;
@@ -217,6 +217,11 @@ public class Monkey {
 	// meant to be overriden
 	public void updateUpgrades() {
 		
+	}
+	
+	// meant to be overriden
+	public void updateImage(int num) {
+		System.out.println("something wrong");
 	}
 	
 	public void purchaseUpgrade0() {
@@ -232,6 +237,7 @@ public class Monkey {
 }
 
 class DartMonkey extends Monkey{
+	public static BufferedImage[] images;
 
 	public DartMonkey(int x, int y, int currFrame, Rectangle hitbox) {
 		super(250, 100, 1, 30, x, y, currFrame, hitbox);
@@ -239,6 +245,18 @@ class DartMonkey extends Monkey{
 		upgradeCosts = new int[] {210, 100};
 		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
 		sellPrice = 200;
+		delayBetweenFrames = 1;
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= images.length * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		
+		image = images[1 + framesPassed / delayBetweenFrames];
 	}
 	
 	public void updateUpgrades() {
@@ -255,12 +273,31 @@ class DartMonkey extends Monkey{
 		}
 	}
 	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[5];
+			File file;
+			
+			file = new File("DMonkey.png");
+			BufferedImage dartSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 5; i++) {
+				
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[0];
 	}
 }
 
 class TackShooter extends Monkey{
+	public static BufferedImage[] images;
 
 	public TackShooter(int x, int y, int currFrame, Rectangle hitbox) {
 		super(400, 70, 1, 30, x, y, currFrame, hitbox);
@@ -268,10 +305,36 @@ class TackShooter extends Monkey{
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
 		sellPrice = 320;
+		delayBetweenFrames = 3;
 	}
 	
-	public void initialize() {
-		BufferedImage tackPNG
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
+	}
+	
+	public static void initialize() {
+		
+		try {
+			images = new BufferedImage[5];
+			File file;
+			
+			file = new File("tackShooter250x50.png");
+			BufferedImage tackSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 5; i++) {
+				images[i] = tackSprites.getSubimage(50 * i, 0, 50, 50);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateUpgrades() {
