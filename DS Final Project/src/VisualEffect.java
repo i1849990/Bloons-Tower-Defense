@@ -18,7 +18,7 @@ public class VisualEffect {
 	
 	public static void intitializeImages() {
 		 try {
-			bloonPop = ImageIO.read(new File("pop44x47.png"));
+			bloonPop = ImageIO.read(new File("pop22x24.png"));
 			
 			bombExplosionImages = new BufferedImage[6];
 			BufferedImage bombSpriteImage = ImageIO.read(new File("bombExploding600x100"));
@@ -37,8 +37,8 @@ public class VisualEffect {
 		startFrame = currFrame;
 		switch(effectName) {
 		case"pop":
-			x = centeredX - 22;
-			y = centeredY - 43;
+			x = centeredX - 11;
+			y = centeredY - 12;
 			endFrame = startFrame + popSpeed;
 			break;
 		case"bomb":

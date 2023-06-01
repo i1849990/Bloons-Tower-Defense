@@ -22,8 +22,12 @@ public class Projectile {
 	public static BufferedImage dartImage;
 	public static BufferedImage bombImage;
 
-	public Projectile(String name, int x, int y, int speed, int rotation, int pierce) {
+	public Projectile(String name, int centeredX, int centeredY, int speed, int rotation, int pierce) {
 		this.name = name;
+		switch(name) {
+		case"dart":
+			x = centeredX - 5;
+		}
 		exactX = x;
 		exactY = y;
 		this.speed = speed;
@@ -49,7 +53,7 @@ public class Projectile {
 	private void handleImage() {
 		switch(name) {
 		case"dart":
-			image = ScreenGUI.rotate(bombImage, rotation);
+			image = ScreenGUI.rotate(bombImage, rotation - (Math.PI / 2));
 			break;
 		case"bomb":
 			image = bombImage;

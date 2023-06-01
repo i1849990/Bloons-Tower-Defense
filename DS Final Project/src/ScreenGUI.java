@@ -73,6 +73,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawBackground(g);
 		drawBloons(g);
 		drawSelectedMonkeyRange(g);
+		drawProjectiles(g);
 		drawMonkeys(g);
 		drawGUI(g);
 		drawMonkeyToBePlaced(g);
@@ -89,6 +90,18 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	public void drawBackground(Graphics g) {
 		g.drawImage(map,0,0,800,600, this);
+	}
+	
+	public void drawProjectiles(Graphics g) {
+		for(Projectile p : game.projectiles) {
+			g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+		}
+	}
+	
+	public void drawVisualEffects(Graphics g) {
+		for(VisualEffect v : game.effects) {
+			g.drawImage(v.getImage(currFrame), v.getX(), v.getY(), this);
+		}
 	}
 	
 	public void drawMonkeys(Graphics g) {
@@ -111,6 +124,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 				toDraw =  m.getImage();
 				break;
 			case"Bomb Tower":
+				rotation -= Math.PI / 2;
 				toDraw =  m.getImage();
 				break;
 			case"Super Monkey":
