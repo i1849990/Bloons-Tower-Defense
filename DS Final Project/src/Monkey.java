@@ -110,8 +110,26 @@ public class Monkey {
 			rotation += Math.PI;
 		}
 		
-		// add projectile
-		return null;
+		String pName = "";
+		switch(name) {
+		case"Dart Monkey":
+			pName = "dart";
+			break;
+		case"Tack Shooter":
+			pName = "tack";
+			break;
+		case"Ice Monkey":
+			return null;
+		case"Bomb Tower":
+			pName = "bomb";
+			break;
+		case"Super Monkey":
+			pName = "dart";
+			break;
+		}
+		
+		int speed = 5; // test different numbers
+		return new Projectile(pName, x2, y2, speed, rotation, pierce);
 	}
 	
 	public boolean canAttack(int currFrame) {

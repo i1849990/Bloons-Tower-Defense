@@ -44,6 +44,7 @@ public class Game {
 		moveBloons();
 		moveProjectiles();
 		handleCollisions();
+		monkeysShoot();
 		currFrame++;
 	}
 	
@@ -115,6 +116,16 @@ public class Game {
 	
 	private boolean bloonLiesInRangeOfMonkey(Bloon b, Monkey m) {
 		return Math.sqrt(Math.pow(m.getCenteredX() - b.getCenteredX(), 2) + Math.pow(m.getCenteredY() - b.getCenteredY(), 2)) <= m.getRange();
+	}
+	
+	private void monkeysShoot() {
+		for(Monkey m : monkeys) {
+			Bloon b = getFurthestBloonInCircle(m);
+			if(!m.canAttack(currFrame) || b == null) {
+				continue;
+			}
+			
+		}
 	}
 	
 	public void bloonReachesEnd(Bloon b) {

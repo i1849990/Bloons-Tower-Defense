@@ -20,9 +20,10 @@ public class Projectile {
 	private Rectangle hitbox;
 	private ArrayList<Bloon> bloonsPierced;
 	public static BufferedImage dartImage;
+	public static BufferedImage tackImage;
 	public static BufferedImage bombImage;
 
-	public Projectile(String name, int centeredX, int centeredY, int speed, int rotation, int pierce) {
+	public Projectile(String name, int centeredX, int centeredY, int speed, double rotation, int pierce) {
 		this.name = name;
 		switch(name) {
 		case"dart":
@@ -43,6 +44,7 @@ public class Projectile {
 	public static void initializeImages() {
 		try {
 			dartImage = ImageIO.read(new File("dart10x43.png"));
+			tackImage = ImageIO.read(new File("tack13x30.png"));
 			bombImage = ImageIO.read(new File("bomb25x30.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -54,6 +56,9 @@ public class Projectile {
 		switch(name) {
 		case"dart":
 			image = ScreenGUI.rotate(bombImage, rotation - (Math.PI / 2));
+			break;
+		case"tack":
+			image = ScreenGUI.rotate(tackImage, rotation - (Math.PI / 2));
 			break;
 		case"bomb":
 			image = bombImage;
