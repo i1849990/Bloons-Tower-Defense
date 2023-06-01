@@ -66,7 +66,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void paint(Graphics g) {
 		long time = System.currentTimeMillis();
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 800, 600);
+		g.fillRect(0, 0, 8000, 6000);
 		
 		game.nextFrame();
 		
@@ -120,6 +120,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			
 			toDraw = rotate(toDraw, rotation);
 			g.drawImage((Image) toDraw,m.getX(), m.getY(), this);
+			
+			// testing:
+			g.drawRect(m.getHitbox().x, m.getHitbox().y, m.getHitbox().width, m.getHitbox().height);
+			g.drawPolygon(game.track.polygon);
 		}
 	}
 	
@@ -314,6 +318,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		}
 		int width = 30;
 		int height = 30;
+		
+		//g.drawRect(mouseX, height, width, height);
 		
 		if(!isValidSpotToPlace()) {
 			Color transparentRed = new Color(255, 0, 0, 100);
