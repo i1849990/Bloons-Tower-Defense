@@ -7,7 +7,7 @@ public class Track {
 	public int[] xPoints;
 	public int[] yPoints;
 	
-	private Polygon polygon;
+	public Polygon polygon;
 	
 	public Track() {
 		this.xPoints = new int[] {-50, 120, 120, 270, 270, 70, 70, 530, 530, 380, 380, 530, 530, 330, 330};
