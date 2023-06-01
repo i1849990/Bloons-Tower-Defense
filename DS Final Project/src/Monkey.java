@@ -1,3 +1,4 @@
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,10 +16,7 @@ public class Monkey {
 	protected int centeredX;
 	protected int centeredY;
 	protected String name;
-	
-	protected BufferedImage image;
 	protected double rotation; // in radians
-	
 	protected Rectangle hitbox; // hitbox used for checking if it overlaps with another monkey the user is trying to place
 	protected int[] upgradeCosts; // should contain 2 values for a monkey's upgrades
 	protected static BufferedImage[][] upgradeImages; // contains the image icons for the monkey upgrades
@@ -26,16 +24,20 @@ public class Monkey {
 	protected boolean[] upgradesPurchased; // are upgrades purchased
 	protected int lastAttackFrame;
 	protected int sellPrice;
+	protected int delayBetweenFrames;
+	protected BufferedImage image;
+	protected BufferedImage[] images; // meant to be overriden
 	
-	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame) {
+	public Monkey(int pCost, int pRange, int pPierce, int pAttackSpeed, int x, int y, int currFrame, Rectangle hitbox) {
+		this.x = x;
+		this.y = y;
 		pierce = pPierce;
 		cost = pCost;
 		range = pRange;
 		attackSpeed = pAttackSpeed;
-		
 		upgradesPurchased = new boolean[]{false, false};
-		
 		lastAttackFrame = currFrame;
+		this.hitbox = hitbox;
 	}
 	
 	public static void initializeImages() {
@@ -67,6 +69,12 @@ public class Monkey {
 			upgradeImages[4][0] = ImageIO.read(file);
 			file = new File("superMonkeyUpgrade1.png");
 			upgradeImages[4][1] = ImageIO.read(file);
+			
+			TackShooter.initialize();
+			DartMonkey.initialize();
+			IceMonkey.initialize();
+			BombTower.initialize();
+			SuperMonkey.initialize();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -150,14 +158,6 @@ public class Monkey {
 		this.centeredY = centeredY;
 	}
 
-	public BufferedImage getImage() {
-		return image;
-	}
-
-	public void setImage(BufferedImage image) {
-		this.image = image;
-	}
-
 	public double getRotation() {
 		return rotation;
 	}
@@ -210,21 +210,64 @@ public class Monkey {
 		return sellPrice;
 	}
 	
+	public BufferedImage getImage() {
+		return image;
+	}
+	
 	// returns null, is meant to be overriden
 	public BufferedImage[] getUpgradeImages() {
 		return null;
 	}
+	
+	// meant to be overriden
+	public void updateUpgrades() {
+		
+	}
+	
+	// meant to be overriden
+	public void updateImage(int num) {
+		System.out.println("something wrong");
+	}
+	
+	public void purchaseUpgrade0() {
+		upgradesPurchased[0] = true;
+		updateUpgrades();
+	}
+	
+	public void purchaseUpgrade1() {
+		upgradesPurchased[1] = true;
+		updateUpgrades();
+	}
+	
 }
 
 class DartMonkey extends Monkey{
+	public static BufferedImage[] images;
 
-	public DartMonkey(int x, int y, int currFrame) {
-		super(250, 100, 1, 30, x, y, currFrame);
+	public DartMonkey(int x, int y, int currFrame, Rectangle hitbox) {
+		super(250, 100, 1, 30, x, y, currFrame, hitbox);
+		centeredX = x + 49 / 2;
+		centeredY = y + 45 / 2;
 		name = "Dart Monkey";
 		upgradeCosts = new int[] {210, 100};
 		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
 		sellPrice = 200;
+<<<<<<< HEAD
 		super.hitbox = new Rectangle(x,y, 99, 91);
+=======
+		delayBetweenFrames = 1;
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		
+		image = images[1 + framesPassed / delayBetweenFrames];
+>>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -241,20 +284,74 @@ class DartMonkey extends Monkey{
 		}
 	}
 	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[10];
+			File file;
+			
+			file = new File("DMonkey.png");
+			BufferedImage dartSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 10; i++) {
+				BufferedImage original = dartSprites.getSubimage(99 * (i % 5), 92 * (i / 5), 98, 90);
+				images[i] = original;
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[0];
 	}
 }
 
 class TackShooter extends Monkey{
+	public static BufferedImage[] images;
 
-	public TackShooter(int x, int y, int currFrame) {
-		super(400, 70, 1, 30, x, y, currFrame);
+	public TackShooter(int x, int y, int currFrame, Rectangle hitbox) {
+		super(400, 70, 1, 30, x, y, currFrame, hitbox);
+		centeredX = x + 50 / 2;
+		centeredY = y + 50 / 2;
 		name = "Tack Shooter";
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
 		sellPrice = 320;
+<<<<<<< HEAD
 		super.hitbox = new Rectangle(x,y, 100, 100);
+=======
+		delayBetweenFrames = 3;
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
+	}
+	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[5];
+			File file;
+			
+			file = new File("tackShooter250x50.png");
+			BufferedImage tackSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 5; i++) {
+				images[i] = tackSprites.getSubimage(50 * i, 0, 50, 50);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+>>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -274,17 +371,26 @@ class TackShooter extends Monkey{
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[1];
 	}
+	
+	
 }
 
 class IceMonkey extends Monkey{
+	public static BufferedImage[] images;
 
-	public IceMonkey(int x, int y, int currFrame) {
-		super(850, 70, 1, 30, x, y, currFrame);
+	public IceMonkey(int x, int y, int currFrame, Rectangle hitbox) {
+		super(850, 70, 1, 30, x, y, currFrame, hitbox);
+		centeredX = x + 50 / 2;
+		centeredY = y + 50 / 2;
 		name = "Ice Monkey";
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
 		sellPrice = 680;
+<<<<<<< HEAD
 		super.hitbox = new Rectangle(x,y, 100, 100);
+=======
+		delayBetweenFrames = 3;
+>>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -301,20 +407,55 @@ class IceMonkey extends Monkey{
 		}
 	}
 	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[6];
+			File file;
+			
+			file = new File("iceMonkey300x50.png");
+			BufferedImage iceSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 6; i++) {
+				images[i] = iceSprites.getSubimage(50 * i, 0, 50, 50);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
+	}
+	
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[2];
 	}
 }
 
 class BombTower extends Monkey{
+	public static BufferedImage[] images;
 
-	public BombTower(int x, int y, int currFrame) {
-		super(900, 120, 1, 30, x, y, currFrame); //customize pierce
+	public BombTower(int x, int y, int currFrame, Rectangle hitbox) {
+		super(900, 120, 1, 30, x, y, currFrame, hitbox); //customize pierce
+		centeredX = x + 50 / 2;
+		centeredY = y + 50 / 2;
 		name = "Bomb Tower";
 		upgradeCosts = new int[] {650, 250};
 		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
 		sellPrice = 720;
+<<<<<<< HEAD
 		super.hitbox = new Rectangle(x,y, 100, 100);
+=======
+		delayBetweenFrames = 3;
+>>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	 
 	public void updateUpgrades() {
@@ -331,20 +472,55 @@ class BombTower extends Monkey{
 		}
 	}
 	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[5];
+			File file;
+			
+			file = new File("bombShooter250x50.png");
+			BufferedImage bombSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 5; i++) {
+				images[i] = bombSprites.getSubimage(50 * i, 0, 50, 50);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
+	}
+	
 	public BufferedImage[] getUpgradeImages() {
 		return upgradeImages[3];
 	}
 }
 
 class SuperMonkey extends Monkey{
+	public static BufferedImage[] images;
 
-	public SuperMonkey(int x, int y, int currFrame) {
-		super(4000, 140, 1, 30, x, y, currFrame); //get atk spd frames
+	public SuperMonkey(int x, int y, int currFrame, Rectangle hitbox) {
+		super(4000, 140, 1, 30, x, y, currFrame, hitbox); //get atk spd frames
+		centeredX = x + 57 / 2;
+		centeredY = y + 53 / 2;
 		name = "Super Monkey";
 		upgradeCosts = new int[] {4500, 2400};
 		upgradeDescriptions = new String[] {"Laser Blasts", "Epic Range"};
 		sellPrice = 3200;
+<<<<<<< HEAD
 		super.hitbox = new Rectangle(x,y, 115, 107);
+=======
+		delayBetweenFrames = 1;
+>>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -359,6 +535,34 @@ class SuperMonkey extends Monkey{
 		if(upgradesPurchased[0] && upgradesPurchased[1]) {
 			sellPrice = 8720;
 		}
+	}
+	
+	public static void initialize() {
+		try {
+			images = new BufferedImage[15];
+			File file;
+			
+			file = new File("superMonkey579x323.png");
+			BufferedImage superSprites = ImageIO.read(file);
+			
+			for(int i = 0; i < 15; i++) {
+				images[i] = superSprites.getSubimage(116 * (i % 5), 108 * (i / 5), 115, 105);
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateImage(int currFrame) {
+		int framesPassed = currFrame - lastAttackFrame;
+		
+		if(framesPassed >= (images.length - 1) * delayBetweenFrames) {
+			image = images[0];
+			return;
+		}
+		image = images[1 + framesPassed / delayBetweenFrames];
 	}
 	
 	public BufferedImage[] getUpgradeImages() {

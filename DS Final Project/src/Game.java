@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +28,8 @@ public class Game {
 		
 		Bloon.initializeImages();
 		Monkey.initializeImages();
+		
+		//bloons.add(new Bloon(track, 0));
 	}
 	
 	public void nextFrame() {
@@ -43,9 +47,15 @@ public class Game {
 		// similar case to bomb explosion
 	}
 	
-	public void advanceRound() {
+	public void tryToAdvanceRound() {
+		if(!roundInProgress) {
+			roundInProgress = true;
+			round++;
+		}
+	}
+	
+	private void endRound() {
 		cash += 100;
-		round++;
 	}
 	
 	public void handleCollisions() {
@@ -109,12 +119,99 @@ public class Game {
 	}
 	
 	public void tryToPurchaseUpgrade0(Monkey m) {
-		if(m.getUpgradeCosts()[0] > cash || m.getUpgradesPurchased()[0]) {
+		if(m.getUpgradeCosts()[0] > cash || m.getUpgradesPurchased()[0] || m == null) {
 			return;
 		}
 		
 		cash -= m.getUpgradeCosts()[0];
+		m.purchaseUpgrade0();
+	}
+	
+	public void tryToPurchaseUpgrade1(Monkey m) {
+		if(m.getUpgradeCosts()[1] > cash || m.getUpgradesPurchased()[1] || m == null) {
+			return;
+		}
 		
+		cash -= m.getUpgradeCosts()[1];
+		m.purchaseUpgrade1();
+	}
+	
+	public void sellMonkey(Monkey m) {
+		if(m != null) {
+			cash += m.getSellPrice();
+			monkeys.remove(m);
+		}
+	}
+	
+	// used to display the range of a tower that is going to be placed for ScreenGUI
+	public int getDisplayRange(String monkeyName) {
+		switch(monkeyName) {
+		case"dart":
+			return 100;
+		case"tack":
+			return 70;
+		case"ice":
+			return 70;
+		case"bomb":
+			return 120;
+		case"super":
+			return 140;
+		}
+		
+		return 0;
+	}
+	
+	public boolean intersectsObjects(Rectangle r) {
+		for(Monkey m : monkeys) {
+			if(r.intersects(m.hitbox)) {
+				return true;
+			}
+		}
+		
+		return track.intersectsRect((Rectangle2D) r);
+	}
+	
+	public void addMonkey(Monkey m) {
+		monkeys.add(m);
+		cash -= m.getCost();
+	}
+	
+	public boolean canAffordTower(String str) {
+		int cost = 0;
+		switch(str) {
+		case"dart":
+			cost = 250;
+			break;
+		case"tack":
+			cost = 400;
+			break;
+		case"ice":
+			cost = 850;
+			break;
+		case"bomb":
+			cost = 900;
+			break;
+		case"super":
+			cost = 4000;
+			break;
+		}
+		return cost <= cash;
+	}
+	
+	public boolean getRoundInProgress() {
+		return roundInProgress;
+	}
+	
+	public int getRound() {
+		return round;
+	}
+	
+	public int getLives() {
+		return lives;
+	}
+	
+	public int getCash() {
+		return cash;
 	}
 	
 }

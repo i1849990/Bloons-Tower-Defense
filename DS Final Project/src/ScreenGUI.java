@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -27,6 +29,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	BufferedImage map;
 	private Monkey selectedMonkey;
+	private String monkeyToBePlaced;
+	int currFrame;
 	
 	long sum; int nums;
 	
@@ -56,6 +60,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			e.printStackTrace();
 		}
 		
+		currFrame = 0;
 	}
 	
 	public void paint(Graphics g) {
@@ -66,12 +71,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		game.nextFrame();
 		
 		drawBackground(g);
-		drawMonkeys(g);
 		drawBloons(g);
+		drawSelectedMonkeyRange(g);
+		drawMonkeys(g);
 		drawGUI(g);
+		drawMonkeyToBePlaced(g);
 		
 		if (nums == 100) {
-			System.out.println(sum / 100);
+			//System.out.println(sum / 100);
 			nums = 1;
 			sum = (System.currentTimeMillis() - time);
 		}else {
@@ -86,26 +93,48 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	public void drawMonkeys(Graphics g) {
 		for(Monkey m : game.monkeys) {
-			// TODO: figure out how to rotate images with AffineTransform
+			m.updateImage(currFrame);
+			double rotation =  m.getRotation();
 			
-			 
+			//test: 
+			BufferedImage toDraw = null;
+			switch(m.getName()) {
+			case"Dart Monkey":
+				toDraw = getScaledInstance(m.getImage(), 49, 45);
+				break;
+			case"Tack Shooter":
+				rotation = 0;
+				toDraw =  m.getImage();
+				break;
+			case"Ice Monkey":
+				rotation = 0;
+				toDraw =  m.getImage();
+				break;
+			case"Bomb Tower":
+				toDraw =  m.getImage();
+				break;
+			case"Super Monkey":
+				toDraw = getScaledInstance(m.getImage(), 57, 53);
+				break;
+			}
+			
+			toDraw = rotate(toDraw, rotation);
+			g.drawImage((Image) toDraw,m.getX(), m.getY(), this);
 		}
 	}
 	
 	public void drawBloons(Graphics g) {
 		for (Bloon b : game.bloons) {
-			System.out.println(b.getX() + " " + b.getY());
 			g.drawImage(b.getImage(), b.getX(), b.getY(), this);
 		}
 	}
 	
 	public void drawGUI(Graphics g) {
+		drawMonkeyGUI(g);
 		drawMenuGUI(g);
 	}
 	
-	public void drawMenuGUI(Graphics g) {
-		selectedMonkey = new IceMonkey(300, 300, 0);
-		selectedMonkey.upgradesPurchased[1] = true; 
+	public void drawMonkeyGUI(Graphics g) {
 		if(selectedMonkey == null) {
 			return;
 		}
@@ -170,7 +199,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		Color[] upgradeColors = new Color[2];
 		Color[] textColors = new Color[2];
-		String[] upgradeStatus = selectedMonkey.getUpgradeStatus(game.cash);
+		String[] upgradeStatus = selectedMonkey.getUpgradeStatus(game.getCash());
 		
 		for(int i = 0; i < 2; i++) {
 			String guiStatus0 = "";
@@ -246,22 +275,146 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// sell price text
 		g.setColor(new Color(238, 255, 243));
 		g.drawString("" + selectedMonkey.getSellPrice(), 715, 481);
+	}
+	
+	public void drawMenuGUI(Graphics g) {
+		// round, cash, lives text
+		g.setFont(new Font("Trebuchet MS", 0, 25));
+		g.drawString("" + game.getRound(), 698, 44);
+		g.drawString("" + game.getCash(), 702, 75);
+		g.drawString("" + game.getLives(), 684, 103);
 		
-		// round start button
-		g.setColor(new Color(162, 216, 162));
-		g.fillRect(600, 500, 182, 63);
+		if(!game.getRoundInProgress()){
+			// round start button
+			g.setColor(new Color(162, 216, 162));
+			g.fillRect(600, 500, 182, 63);
+			
+			// "Start Round" text
+			g.setColor(new Color(255, 255, 255));
+			g.setFont(new Font("Trebuchet MS", 1, 30));
+			g.drawString("Start Round", 608, 540);
+		}
+	}
+	
+	public void drawSelectedMonkeyRange(Graphics g) {
+		if(selectedMonkey == null) {
+			return;
+		}
 		
-		// "Start Round" text
-		g.setColor(new Color(255, 255, 255));
-		g.setFont(new Font("Trebuchet MS", 1, 30));
-		g.drawString("Start Round", 608, 540);
+		Color transparentWhite = new Color(255, 255, 255, 100);
+		g.setColor(transparentWhite);
+		
+		int radius = selectedMonkey.getRange();
+		g.fillOval(selectedMonkey.centeredX - radius, selectedMonkey.centeredY - radius, radius * 2, radius * 2);
+	}
+	
+	public void drawMonkeyToBePlaced(Graphics g){
+		if(monkeyToBePlaced == null) {
+			return;
+		}
+		int width = 30;
+		int height = 30;
+		
+		if(!isValidSpotToPlace()) {
+			Color transparentRed = new Color(255, 0, 0, 100);
+			g.setColor(transparentRed);
+		}else {
+			Color transparentWhite = new Color(255, 255, 255, 100);
+			g.setColor(transparentWhite);
+		}
+		
+		int radius = game.getDisplayRange(monkeyToBePlaced);
+		g.fillOval(mouseX - radius, mouseY - radius, radius * 2, radius * 2);
+		
+		Image img = null;
+		int imageW = 0;
+		int imageH = 0;
+		
+		switch(monkeyToBePlaced) {
+		case"dart":
+			imageW = 49;
+			imageH = 45;
+			img = getScaledInstance(DartMonkey.images[0],49,45);
+			break;
+		case"tack":
+			imageW = TackShooter.images[0].getWidth();
+			imageH = TackShooter.images[0].getHeight();
+			img = TackShooter.images[0];
+			break;
+		case"ice":
+			imageW = IceMonkey.images[0].getWidth();
+			imageH = IceMonkey.images[0].getHeight();
+			img = IceMonkey.images[0];
+			break;
+		case"bomb":
+			imageW = BombTower.images[0].getWidth();
+			imageH = BombTower.images[0].getHeight();
+			img = BombTower.images[0];
+			break;
+		case"super":
+			imageW = 57;
+			imageH = 53;
+			img = getScaledInstance(SuperMonkey.images[0],57,53);
+			break;
+		}
+		
+		g.drawImage(img, mouseX - imageW / 2, mouseY - imageH / 2, this);
+	}
+	
+	private void addMonkeyToBePlaced() {
+		Monkey m = null;
+		int width = 30;
+		int height = 30;
+		
+		int imageW;
+		int imageH;
+		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
+		switch(monkeyToBePlaced) {
+		case"dart":
+			imageW = 49;
+			imageH = 45;
+			m = new DartMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
+			break;
+		case"tack":
+			imageW = TackShooter.images[0].getWidth();
+			imageH = TackShooter.images[0].getHeight();
+			m = new TackShooter(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
+			break;
+		case"ice":
+			imageW = IceMonkey.images[0].getWidth();
+			imageH = IceMonkey.images[0].getHeight();
+			m = new IceMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
+			break;
+		case"bomb":
+			imageW = BombTower.images[0].getWidth();
+			imageH = BombTower.images[0].getHeight();
+			m = new BombTower(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
+			break;
+		case"super":
+			imageW = 57;
+			imageH = 53;
+			m = new SuperMonkey(mouseX - imageW / 2, mouseY - imageH / 2, currFrame, toBePlacedHitbox);
+			break;
+		}
+		
+		game.addMonkey(m);
+		selectedMonkey = m;
+		monkeyToBePlaced = null;
+	}
+	
+	private boolean isValidSpotToPlace() {
+		int width = 30;
+		int height = 30;
+		Rectangle toBePlacedHitbox = new Rectangle(mouseX - width / 2, mouseY - height / 2, width, height);
+		
+		return !game.intersectsObjects(toBePlacedHitbox) && mouseX <= 550 && mouseY <= 550;
 	}
 	
 	public boolean[] mouseHoveringUpgrades() {
 		Rectangle rect0 = new Rectangle(605, 274, 85, 180);
 		Rectangle rect1 = new Rectangle(693, 274, 85, 180);
 		if(rect0.contains(mouseX, mouseY)) {
-			return  new boolean[] {true, false};
+			return new boolean[] {true, false};
 		}else if(rect1.contains(mouseX, mouseY)) {
 			return new boolean[] {false, true};
 		}else {
@@ -283,9 +436,18 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		return null;
 	}
 	
-	
 	private boolean mouseLiesInCircle(int circleX, int circleY, int radius) {
 		return Math.pow(mouseX - circleX, 2) + Math.pow(mouseY - circleY, 2) <= Math.pow(radius, 2);
+	}
+	
+	private Monkey getMonkeyClickedOn() {
+		for(Monkey m : game.monkeys) {
+			if(m.getHitbox().contains(mouseX, mouseY)) {
+				return m;
+			}
+		}
+		
+		return null;
 	}
 	
 	private boolean mouseClickedOnUpgrade0() {
@@ -298,27 +460,28 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		return right.contains(mouseX, mouseY);
 	}
 	
-	private Monkey monkeyClickedOn() {
-		for(Monkey m : game.monkeys) {
-			if(m.getHitbox().contains(mouseX, mouseY)) {
-				return m;
-			}
-		}
-		
-		return null;
+	private boolean mouseClickedOnSell() {
+		Rectangle sell = new Rectangle(605, 460, 173, 29);
+		return sell.contains(mouseX, mouseY);
+	}
+	
+	private boolean mouseClickedOnNextRound() {
+		Rectangle nextRound = new Rectangle(600, 500, 182, 63);
+		return nextRound.contains(mouseX, mouseY);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == t) { 
+			currFrame++;
 			repaint();
 		}
 		
 	}
 	
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// magic numbers that returns the mouse's real position
 		mouseX = e.getX() - 6;
 		mouseY = e.getY() - 29;
 		
@@ -336,16 +499,39 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// TODO Auto-generated method stub
 		// handle clicks on screengui, then monkeys
 		handleSelectedMonkey();
+		
 		if(mouseClickedOnUpgrade0()) {
-			
+			game.tryToPurchaseUpgrade0(selectedMonkey);
+		}
+		
+		if(mouseClickedOnUpgrade1()) {
+			game.tryToPurchaseUpgrade1(selectedMonkey);
+		}
+		
+		if(mouseClickedOnSell()) {
+			game.sellMonkey(selectedMonkey);
+			selectedMonkey = null;
+		}
+		
+		if(mouseClickedOnNextRound()) {
+			game.tryToAdvanceRound();
+		}
+		
+		String buttonClicked = getMonkeyButtonClickedOn();
+		if(buttonClicked != null) {
+			monkeyToBePlaced = buttonClicked;
+		}
+		
+		if(monkeyToBePlaced != null && isValidSpotToPlace()) {
+			addMonkeyToBePlaced();
 		}
 	}
 	
 	public void handleSelectedMonkey() {
-		if(mouseClickedOnUpgrade0() || mouseClickedOnUpgrade1()) {
+		if(mouseClickedOnUpgrade0() || mouseClickedOnUpgrade1() || mouseClickedOnSell() || mouseClickedOnNextRound()) {
 			// do nothing, selected monkey should still be the same
 		}else {
-			selectedMonkey = monkeyClickedOn();
+			selectedMonkey = getMonkeyClickedOn();
 		}
 	}
 	
@@ -374,7 +560,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	// copied from stack overflow imma be honest
-	// https://stackoverflow.com/questions/4413132/problems-with-newline-in-graphics2d-drawstring
+	// https://stackoverflow.com/a/19864657
 	public void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 	    FontMetrics m = g.getFontMetrics();
 	    if(m.stringWidth(text) < lineWidth) {
@@ -396,5 +582,38 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	        }
 	    }
 	}
+	
+	
+	// also copied from stack overflow cause I don't know how to rotate an image
+	// https://stackoverflow.com/a/68926993
+	// - modified to take in radians instead of degrees
+	public static BufferedImage rotate(BufferedImage bimg, Double angle) {
+	    double sin = Math.abs(Math.sin(angle)),
+	           cos = Math.abs(Math.cos(angle));
+	    int w = bimg.getWidth();
+	    int h = bimg.getHeight();
+	    int neww = (int) Math.floor(w*cos + h*sin),
+	        newh = (int) Math.floor(h*cos + w*sin);
+	    BufferedImage rotated = new BufferedImage(neww, newh, bimg.getType());
+	    Graphics2D graphic = rotated.createGraphics();
+	    graphic.translate((neww-w)/2, (newh-h)/2);
+	    graphic.rotate(angle, w/2, h/2);
+	    graphic.drawRenderedImage(bimg, null);
+	    graphic.dispose();
+	    return rotated;
+	}
+	
+	// copied from random github repo
+	// https://github.com/nguyenq/tess4j/blob/master/src/main/java/net/sourceforge/tess4j/util/ImageHelper.java
+    public static BufferedImage getScaledInstance(BufferedImage image, int targetWidth, int targetHeight) {
+        int type = (image.getTransparency() == Transparency.OPAQUE)
+                ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage tmp = new BufferedImage(targetWidth, targetHeight, type);
+        Graphics2D g2 = tmp.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2.drawImage(image, 0, 0, targetWidth, targetHeight, null);
+        g2.dispose();
+        return tmp;
+    }
 
 }
