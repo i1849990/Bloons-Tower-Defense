@@ -261,9 +261,6 @@ class DartMonkey extends Monkey{
 		upgradeCosts = new int[] {210, 100};
 		upgradeDescriptions = new String[] {"Piercing Darts", "Extra Range"};
 		sellPrice = 200;
-<<<<<<< HEAD
-		super.hitbox = new Rectangle(x,y, 99, 91);
-=======
 		delayBetweenFrames = 1;
 	}
 	
@@ -276,7 +273,6 @@ class DartMonkey extends Monkey{
 		}
 		
 		image = images[1 + framesPassed / delayBetweenFrames];
->>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -328,9 +324,6 @@ class TackShooter extends Monkey{
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Faster Shooting", "Extra Range"};
 		sellPrice = 320;
-<<<<<<< HEAD
-		super.hitbox = new Rectangle(x,y, 100, 100);
-=======
 		delayBetweenFrames = 3;
 	}
 	
@@ -360,7 +353,6 @@ class TackShooter extends Monkey{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
->>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -395,11 +387,7 @@ class IceMonkey extends Monkey{
 		upgradeCosts = new int[] {250, 150};
 		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
 		sellPrice = 680;
-<<<<<<< HEAD
-		super.hitbox = new Rectangle(x,y, 100, 100);
-=======
 		delayBetweenFrames = 3;
->>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
@@ -460,13 +448,9 @@ class BombTower extends Monkey{
 		upgradeCosts = new int[] {650, 250};
 		upgradeDescriptions = new String[] {"Bigger Bombs", "Extra Range"};
 		sellPrice = 720;
-<<<<<<< HEAD
-		super.hitbox = new Rectangle(x,y, 100, 100);
-=======
 		delayBetweenFrames = 3;
->>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
-	 
+	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			//bigger projectile
@@ -525,11 +509,7 @@ class SuperMonkey extends Monkey{
 		upgradeCosts = new int[] {4500, 2400};
 		upgradeDescriptions = new String[] {"Laser Blasts", "Epic Range"};
 		sellPrice = 3200;
-<<<<<<< HEAD
-		super.hitbox = new Rectangle(x,y, 115, 107);
-=======
 		delayBetweenFrames = 1;
->>>>>>> branch 'master' of https://github.com/i1849990/Bloons-Tower-Defense.git
 	}
 	
 	public void updateUpgrades() {
