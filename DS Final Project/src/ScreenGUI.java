@@ -120,12 +120,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			
 			toDraw = rotate(toDraw, rotation);
 			g.drawImage((Image) toDraw,m.getX(), m.getY(), this);
-			
-			// testing:
-			System.out.println("width: " + m.getHitbox().width);
-			System.out.println("height: " + m.getHitbox().height);
-			g.drawRect(m.getHitbox().x, m.getHitbox().y, m.getHitbox().width, m.getHitbox().height);
-			g.drawPolygon(game.track.polygon);
 		}
 	}
 	
