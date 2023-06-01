@@ -563,6 +563,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	// copied from stack overflow imma be honest
 	// https://stackoverflow.com/a/19864657
+	// draws a string at an inputted x,y with line width and automatically makes a new line, like a docs program
 	public void drawStringMultiLine(Graphics2D g, String text, int lineWidth, int x, int y) {
 	    FontMetrics m = g.getFontMetrics();
 	    if(m.stringWidth(text) < lineWidth) {
@@ -585,10 +586,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	    }
 	}
 	
-	
 	// also copied from stack overflow cause I don't know how to rotate an image
 	// https://stackoverflow.com/a/68926993
-	// - modified to take in radians instead of degrees
+	// rotates a bufferedImage, returns a bufferedImage - modified to take in radians instead of degrees
 	public static BufferedImage rotate(BufferedImage bimg, Double angle) {
 	    double sin = Math.abs(Math.sin(angle)),
 	           cos = Math.abs(Math.cos(angle));
@@ -607,6 +607,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	
 	// copied from random github repo
 	// https://github.com/nguyenq/tess4j/blob/master/src/main/java/net/sourceforge/tess4j/util/ImageHelper.java
+	// returns a scaled BufferedImage of a BufferedImage, necessary because the normal getScaledInstance program returns an Image, not a BufferedImage
     public static BufferedImage getScaledInstance(BufferedImage image, int targetWidth, int targetHeight) {
         int type = (image.getTransparency() == Transparency.OPAQUE)
                 ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;

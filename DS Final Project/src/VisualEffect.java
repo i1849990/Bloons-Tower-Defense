@@ -10,21 +10,21 @@ public class VisualEffect {
 	private static BufferedImage bloonPop;
 	private static BufferedImage bombExplosionImages[];
 	private String effectName;
+	private int x;
+	private int y;
 	
 	private int popSpeed = 10;
-	private int bombSpeed = 4;
+	private int bombSpeed = 40;
 	
 	public static void intitializeImages() {
 		 try {
-			bloonPop = ImageIO.read(new File("bloonpop.png"));
+			bloonPop = ImageIO.read(new File("pop44x47.png"));
+			
 			bombExplosionImages = new BufferedImage[6];
-			
 			BufferedImage bombSpriteImage = ImageIO.read(new File("bombExploding600x100"));
-			
 			for(int i = 0; i < 6; i++) {
 				bombExplosionImages[i] = bombSpriteImage.getSubimage(i*100, 0, 100, 100);
 			}
-
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -32,14 +32,18 @@ public class VisualEffect {
 		}
 	}
 	
-	public VisualEffect(int currFrame, String effectName) {
+	public VisualEffect(int currFrame, String effectName, int centeredX, int centeredY) {
 		this.effectName = effectName;
 		startFrame = currFrame;
 		switch(effectName) {
 		case"pop":
+			x = centeredX - 22;
+			y = centeredY - 43;
 			endFrame = startFrame + popSpeed;
 			break;
 		case"bomb":
+			x = centeredX - 50;
+			y = centeredY - 50;
 			endFrame = startFrame + 6 * bombSpeed;
 			break;
 		}
@@ -63,5 +67,13 @@ public class VisualEffect {
 			return currFrame >= 6 * bombSpeed;
 		}
 		return true;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
 	}
 }

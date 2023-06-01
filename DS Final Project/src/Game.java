@@ -9,13 +9,15 @@ public class Game {
 	public int lives;
 	public int round;
 
-	ArrayList<Bloon> bloons = new ArrayList<Bloon>();
-	ArrayList<Monkey> monkeys = new ArrayList<Monkey>();
-	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
-	Track track;
+	public ArrayList<Bloon> bloons;
+	public ArrayList<Monkey> monkeys;
+	public ArrayList<Projectile> projectiles;
+	public ArrayList<VisualEffect> effects;
+	
+	public Track track;
 	
 	private int currFrame;
-	boolean roundInProgress;
+	private boolean roundInProgress;
 	
 	public Game(Track track) {
 		cash = 650;
@@ -23,11 +25,17 @@ public class Game {
 		round = 0;
 		this.track = track;
 		currFrame = 0;
-		
 		roundInProgress = false;
+		
+		bloons = new ArrayList<Bloon>();
+		monkeys = new ArrayList<Monkey>();
+		projectiles = new ArrayList<Projectile>();
+		effects = new ArrayList<VisualEffect>();
 		
 		Bloon.initializeImages();
 		Monkey.initializeImages();
+		VisualEffect.intitializeImages();
+		Projectile.initializeImages();
 		
 		//bloons.add(new Bloon(track, 0));
 	}

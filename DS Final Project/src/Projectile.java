@@ -1,34 +1,72 @@
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 public class Projectile {
-	public BufferedImage image;
-	public int x;
-	public int y;
+	private String name;
+	private BufferedImage image;
+	private int x;
+	private int y;
+	private double exactX;
+	private double exactY;
 	private int speed;
 	private int damage;
-	private double direction; // radians
+	private double rotation; // radians
 	private int pierce;
 	private Rectangle hitbox;
 	private ArrayList<Bloon> bloonsPierced;
-	
+	public static BufferedImage dartImage;
+	public static BufferedImage bombImage;
 
-	public Projectile(BufferedImage image, int x, int y, int speed, int direction, int pierce) {
-		this.image = image;
-		this.x = x;
-		this.y = y;
+	public Projectile(String name, int x, int y, int speed, int rotation, int pierce) {
+		this.name = name;
+		exactX = x;
+		exactY = y;
 		this.speed = speed;
-		this.direction = direction;
+		this.rotation = rotation;
 		this.pierce = pierce;
 		bloonsPierced = new ArrayList<Bloon>();
+		
+		handleImage();
+		updateXY();
+		updateHitbox();
+	}
+	
+	public static void initializeImages() {
+		try {
+			dartImage = ImageIO.read(new File("dart10x43.png"));
+			bombImage = ImageIO.read(new File("bomb25x30.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void handleImage() {
+		switch(name) {
+		case"dart":
+			image = ScreenGUI.rotate(bombImage, rotation);
+			break;
+		case"bomb":
+			image = bombImage;
+			break;
+		}
 	}
 	
 	public void move() {
-		x += (int) (Math.sin(direction) * speed);
-		y += (int) (Math.cos(direction) * speed);
+		exactX += Math.sin(rotation) * speed;
+		exactY += Math.cos(rotation) * speed;
+		updateXY();
 		updateHitbox();
+	}
+	
+	private void updateXY() {
+		x = (int) exactX;
+		y = (int) exactY;
 	}
 	
 	public boolean handleCollision(Bloon b) {
@@ -94,12 +132,12 @@ public class Projectile {
 		this.damage = damage;
 	}
 
-	public double getDirection() {
-		return direction;
+	public double getRotation() {
+		return rotation;
 	}
 
-	public void setDirection(double direction) {
-		this.direction = direction;
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
 	}
 
 	public int getPierce() {
