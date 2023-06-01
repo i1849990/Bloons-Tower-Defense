@@ -20,7 +20,7 @@ public class Game {
 	public Game(Track track) {
 		cash = 650;
 		lives = 40;
-		round = 1;
+		round = 0;
 		this.track = track;
 		currFrame = 0;
 		

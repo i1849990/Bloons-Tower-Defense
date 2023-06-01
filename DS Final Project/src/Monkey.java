@@ -105,6 +105,11 @@ public class Monkey {
 		int x2 = b.getCenteredX();
 		int y2 = b.getCenteredY();
 		
+		rotation = Math.atan((double)(y2-y1)/(x2-x1));
+		if(x2-x1 < 0) {
+			rotation += Math.PI;
+		}
+		
 		return null;
 	}
 	
