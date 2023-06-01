@@ -99,6 +99,15 @@ public class Monkey {
 		return res;
 	}
 	
+	public Projectile pointTowardsBloonAndCreateProjectile(Bloon b) {
+		int x1 = centeredX;
+		int y1 = centeredY;
+		int x2 = b.getCenteredX();
+		int y2 = b.getCenteredY();
+		
+		return null;
+	}
+	
 	public boolean canAttack(int currFrame) {
 		return currFrame - lastAttackFrame >= attackSpeed;
 	}
