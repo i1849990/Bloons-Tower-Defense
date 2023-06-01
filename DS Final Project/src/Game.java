@@ -14,7 +14,7 @@ public class Game {
 	ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	Track track;
 	
-	private long currFrame;
+	private int currFrame;
 	boolean roundInProgress;
 	
 	public Game(Track track) {

@@ -28,6 +28,7 @@ public class Projectile {
 	public void move() {
 		x += (int) (Math.sin(direction) * speed);
 		y += (int) (Math.cos(direction) * speed);
+		updateHitbox();
 	}
 	
 	public boolean handleCollision(Bloon b) {
@@ -39,6 +40,14 @@ public class Projectile {
 		bloonsPierced.add(b);
 		
 		return false;
+	}
+	
+	private void updateHitbox() {
+		hitbox = new Rectangle(x, y, image.getWidth(), image.getHeight());
+	}
+	
+	private boolean checkOutOfBounds() {
+		return (x <= -50 || x >= 650 || y <= -50 || y >= 650);
 	}
 	
 	public boolean hasPiercedBloon(Bloon b) {
