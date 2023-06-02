@@ -64,67 +64,58 @@ public class Bloon implements Comparable<Bloon>{
 	
 	// returns true if the bloon reaches the end of the track
 	private boolean moveRec(double distRemaining, String nextDir) {
-		
 		int nextGoalX = t.xPoints[trackPoint];
 		int nextGoalY = t.yPoints[trackPoint];
 		
-		//String dir1 = getNextDirection(nextGoalX, nextGoalY);
-		
+		// move the bloon towards the next track point
+		double distOvershot = 0;
 		switch(nextDir) {
 		case"right":
 			centeredX += distRemaining;
-			break;
-		case "left":
-			centeredX -= distRemaining;
-			break;
-		case "down":
-			centeredY += distRemaining;
-			break;
-		case "up":
-			centeredY -= distRemaining;
-			break;
-		}
-		
-		String dir2 = getNextDirection(nextGoalX, nextGoalY);
-		
-		if(nextDir.equals(dir2)) {
-			return false;
-		}
-		
-		trackPoint++;
-		
-		if(trackPoint >= t.xPoints.length) {
-			return true;
-		}
-		
-		double distOvershot = 0;
-		
-		switch(nextDir) {
-		case"right":
 			distOvershot = centeredX - nextGoalX;
 			break;
 		case "left":
+			centeredX -= distRemaining;
 			distOvershot = nextGoalX - centeredX;
 			break;
 		case "down":
+			centeredY += distRemaining;
 			distOvershot = centeredY - nextGoalY;
 			break;
 		case "up":
+			centeredY -= distRemaining;
 			distOvershot = nextGoalY - centeredY;
 			break;
 		}
 		
+		// if a bloon moves towards its next point and does not overshoot
+		// then it is done with the process, and it returns false (it hasn't reached the end)
+		String dir2 = getNextDirection(nextGoalX, nextGoalY);
+		if(nextDir.equals(dir2)) {
+			return false;
+		}
+		
+		// a bloon has reached the end of the track, return true
+		trackPoint++;
+		if(trackPoint >= t.xPoints.length) {
+			return true;
+		}
+		
+		// set the bloon to the track point and prepare for the next recursion
 		centeredX = nextGoalX;
 		centeredY = nextGoalY;
-		
 		String dir3 = getNextDirection(t.xPoints[trackPoint], t.yPoints[trackPoint]);
 		
 		return moveRec(distOvershot, dir3);
 	}
 	
 	private boolean startMoveRec() {
+		// starting point of the track, offscreen to the left
 		centeredX = -50;
 		centeredY = 280;
+		
+		// starts moving towards the SECOND point, because it starts at the first one
+		// (second point is trackpoint 1)
 		trackPoint = 1;
 		
 		return moveRec(trackDist,"right");

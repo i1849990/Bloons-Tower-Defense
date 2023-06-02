@@ -37,7 +37,7 @@ public class Game {
 		VisualEffect.intitializeImages();
 		Projectile.initializeImages();
 		
-		//bloons.add(new Bloon(track, 0));
+		bloons.add(new Bloon(track, 0));
 	}
 	
 	public void nextFrame() {
