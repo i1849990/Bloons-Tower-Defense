@@ -89,7 +89,7 @@ public class Bloon implements Comparable<Bloon>{
 		}
 		
 		// if a bloon moves towards its next point and does not overshoot
-		// then it is done with the process, and it returns false (it hasn't reached the end)
+		// then it is done wit3h the process, and it returns false (it hasn't reached the end)
 		String dir2 = getNextDirection(nextGoalX, nextGoalY);
 		if(nextDir.equals(dir2)) {
 			return false;
@@ -259,6 +259,7 @@ public class Bloon implements Comparable<Bloon>{
 	}
 
 	@Override
+	// used for sorting 
 	public int compareTo(Bloon b) {
 		// TODO Auto-generated method stub
 		if(trackDist == b.trackDist) {
