@@ -536,7 +536,7 @@ class SuperMonkey extends Monkey{
 	public static BufferedImage[] images;
 
 	public SuperMonkey(int x, int y, int currFrame, Rectangle hitbox) {
-		super(4000, 140, 1, 30, x, y, currFrame, hitbox); //get atk spd frames
+		super(4000, 140, 1, 5, x, y, currFrame, hitbox); //get atk spd frames
 		centeredX = x + 57 / 2;
 		centeredY = y + 53 / 2;
 		name = "Super Monkey";

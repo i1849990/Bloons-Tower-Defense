@@ -93,9 +93,11 @@ public class Game {
 	}
 	
 	public void moveBloons() {
-		for(Bloon b: bloons) {
+		for(int i = 0; i < bloons.size(); i++) {
+			Bloon b = bloons.get(i);
 			if(b.move()) {
 				bloonReachesEnd(b);
+				i--;
 			}
 		}
 	}

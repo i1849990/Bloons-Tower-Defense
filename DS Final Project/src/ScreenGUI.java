@@ -80,7 +80,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeyToBePlaced(g);
 		
 		if (nums == 100) {
-			//System.out.println(sum / 100);
+			System.out.println(sum / 100);
 			nums = 1;
 			sum = (System.currentTimeMillis() - time);
 		}else {
@@ -514,7 +514,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton() == 3) {
-			game.bloons.add(new Bloon(game.track, 0));
+			game.bloons.add(new Bloon(game.track, 3));
 		}
 		// TODO Auto-generated method stub
 		// handle clicks on screengui, then monkeys
@@ -636,5 +636,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
         g2.dispose();
         return tmp;
     }
+    
 
 }
