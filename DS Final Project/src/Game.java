@@ -37,7 +37,6 @@ public class Game {
 		VisualEffect.intitializeImages();
 		Projectile.initializeImages();
 		
-		bloons.add(new Bloon(track, 0));
 	}
 	
 	public void nextFrame() {
@@ -45,7 +44,6 @@ public class Game {
 		moveProjectiles();
 		handleCollisions();
 		monkeysShoot();
-		currFrame++;
 	}
 	
 	public void bombExplosion() {
@@ -68,23 +66,27 @@ public class Game {
 	}
 	
 	public void handleCollisions() {
-		for (Bloon b: bloons) {
-			for(Projectile p : projectiles) {
+		for (int i = 0; i < bloons.size(); i++) {
+			Bloon b = bloons.get(i);
+			for(int j = 0; j < projectiles.size(); j++) {
+				Projectile p = projectiles.get(j);
 				if(p.hasPiercedBloon(b)) {
-					return;
+					continue;
 				}
 				if(!b.getHitbox().intersects(p.getHitbox())) {
-					return;
+					continue;
 				}
 				
 				cash += 1;
 				
 				if(p.handleCollision(b)) {
 					projectiles.remove(p);
+					j--;
 				}
 				
 				if(b.popLayer()) {
 					bloons.remove(b);
+					i--;
 				}
 			}
 		}
@@ -99,8 +101,13 @@ public class Game {
 	}
 	
 	public void moveProjectiles() {
-		for(Projectile p : projectiles) {
+		for(int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
 			p.move();
+			if(p.outOfBounds()) {
+				projectiles.remove(p);
+				i--;
+			}
 		}
 	}
 	
@@ -121,16 +128,25 @@ public class Game {
 	private void monkeysShoot() {
 		for(Monkey m : monkeys) {
 			Bloon b = getFurthestBloonInCircle(m);
+			
 			if(!m.canAttack(currFrame) || b == null) {
 				continue;
 			}
 			
+			Projectile[] output = (m.pointTowardsBloonAndCreateProjectile(b, currFrame));
+			for(Projectile p : output) {
+				projectiles.add(p);
+			}
 		}
 	}
 	
 	public void bloonReachesEnd(Bloon b) {
 		lives -= b.getLayer() + 1;
 		bloons.remove(b);
+	}
+	
+	public void updateFrame(int frame) {
+		currFrame = frame;
 	}
 	
 	public void startGame() {

@@ -22,12 +22,24 @@ public class Projectile {
 	public static BufferedImage dartImage;
 	public static BufferedImage tackImage;
 	public static BufferedImage bombImage;
+	private int framesActiveFor;
 
 	public Projectile(String name, int centeredX, int centeredY, int speed, double rotation, int pierce) {
+		framesActiveFor = 0;
 		this.name = name;
 		switch(name) {
 		case"dart":
 			x = centeredX - 5;
+			y = centeredY - 21;
+			break;
+		case"tack":
+			x = centeredX - 6;
+			y = centeredY - 15;
+			break;
+		case"bomb":
+			x = centeredX - 12;
+			y = centeredY - 15;
+			break;
 		}
 		exactX = x;
 		exactY = y;
@@ -55,10 +67,10 @@ public class Projectile {
 	private void handleImage() {
 		switch(name) {
 		case"dart":
-			image = ScreenGUI.rotate(bombImage, rotation - (Math.PI / 2));
+			image = ScreenGUI.rotate(dartImage, rotation + (Math.PI / 2));
 			break;
 		case"tack":
-			image = ScreenGUI.rotate(tackImage, rotation - (Math.PI / 2));
+			image = ScreenGUI.rotate(tackImage, rotation + (Math.PI / 2));
 			break;
 		case"bomb":
 			image = bombImage;
@@ -67,10 +79,11 @@ public class Projectile {
 	}
 	
 	public void move() {
-		exactX += Math.sin(rotation) * speed;
-		exactY += Math.cos(rotation) * speed;
+		exactX += Math.cos(rotation) * speed;
+		exactY += Math.sin(rotation) * speed;
 		updateXY();
 		updateHitbox();
+		framesActiveFor++;
 	}
 	
 	private void updateXY() {
@@ -93,8 +106,8 @@ public class Projectile {
 		hitbox = new Rectangle(x, y, image.getWidth(), image.getHeight());
 	}
 	
-	private boolean checkOutOfBounds() {
-		return (x <= -50 || x >= 650 || y <= -50 || y >= 650);
+	public boolean outOfBounds() {
+		return (x <= -50 || x >= 650 || y <= -50 || y >= 650 || framesActiveFor >= 15);
 	}
 	
 	public boolean hasPiercedBloon(Bloon b) {

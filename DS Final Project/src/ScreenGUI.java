@@ -69,6 +69,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		g.fillRect(0, 0, 8000, 6000);
 		
 		game.nextFrame();
+		game.updateFrame(currFrame);
 		
 		drawBackground(g);
 		drawBloons(g);
@@ -512,6 +513,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(e.getButton() == 3) {
+			game.bloons.add(new Bloon(game.track, 0));
+		}
 		// TODO Auto-generated method stub
 		// handle clicks on screengui, then monkeys
 		handleSelectedMonkey();

@@ -99,16 +99,16 @@ public class Monkey {
 		return res;
 	}
 	
-	public Projectile pointTowardsBloonAndCreateProjectile(Bloon b) {
+	public Projectile[] pointTowardsBloonAndCreateProjectile(Bloon b, int currFrame) {
+		Projectile[] res;
 		int x1 = centeredX;
 		int y1 = centeredY;
 		int x2 = b.getCenteredX();
 		int y2 = b.getCenteredY();
+		lastAttackFrame = currFrame;
 		
-		rotation = Math.atan((double)(y2-y1)/(x2-x1));
-		if(x2-x1 < 0) {
-			rotation += Math.PI;
-		}
+		int speed = 10; // test different numbers
+		
 		
 		String pName = "";
 		switch(name) {
@@ -117,7 +117,11 @@ public class Monkey {
 			break;
 		case"Tack Shooter":
 			pName = "tack";
-			break;
+			res = new Projectile[8];
+			for(int i = 0; i < 8; i++) {
+				res[i] = new Projectile(pName, x1, y1, speed, (Math.PI / 4.0) * i, pierce);
+			}
+			return res;
 		case"Ice Monkey":
 			return null;
 		case"Bomb Tower":
@@ -127,9 +131,15 @@ public class Monkey {
 			pName = "dart";
 			break;
 		}
+		res = new Projectile[1];
 		
-		int speed = 5; // test different numbers
-		return new Projectile(pName, x2, y2, speed, rotation, pierce);
+		rotation = Math.atan((double)(y2-y1)/(x2-x1));
+		if(x2-x1 < 0) {
+			rotation += Math.PI;
+		}
+		
+		res[0] = new Projectile(pName, x1, y1, speed, rotation, pierce);
+		return res;
 	}
 	
 	public boolean canAttack(int currFrame) {
