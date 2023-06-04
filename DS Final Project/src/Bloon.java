@@ -23,12 +23,14 @@ public class Bloon implements Comparable<Bloon>{
 	private boolean isFrozen;
 	private static Track t;
 	public static BufferedImage[] images;
+	public static BufferedImage[] frozenImages;
 	public static double[] speeds = {1.8,2.0,3,4,3,3};
 	private double speed;
 	public Rectangle hitbox;
+	private int frameFrozen;
+	private int framesBloonsAreFrozenFor;
 	
-	public Bloon(Track t, int layer) {
-		this.t = t;
+	public Bloon(int layer) {
 		trackPoint = 1;
 		centeredX = t.xPoints[0];
 		centeredY = t.yPoints[0];
@@ -36,25 +38,33 @@ public class Bloon implements Comparable<Bloon>{
 		this.layer = layer;
 		speed = speeds[layer];
 		trackDist = 0;
+		frameFrozen = -9999;
+		framesBloonsAreFrozenFor = 50;
+	}
+	
+	public static void initalizeTrack(Track track) {
+		t = track;
 	}
 	
 	public static void initializeImages() {
 		images = new BufferedImage[6];
+		frozenImages = new BufferedImage[6];
 		
 		try {
 			File file;
-			file = new File("redbloon.png");
-			images[0] = ImageIO.read(file);
-			file = new File("bluebloon.png");
-			images[1] = ImageIO.read(file);
-			file = new File("greenbloon.png");
-			images[2] = ImageIO.read(file);
-			file = new File("yellowbloon.png");
-			images[3] = ImageIO.read(file);
-			file = new File("blackbloon.png");
-			images[4] = ImageIO.read(file);
-			file = new File("whitebloon.png");
-			images[5] = ImageIO.read(file);
+			images[0] = ImageIO.read(new File("redbloon.png"));
+			images[1] = ImageIO.read(new File("bluebloon.png"));
+			images[2] = ImageIO.read(new File("greenbloon.png"));
+			images[3] = ImageIO.read(new File("yellowbloon.png"));
+			images[4] = ImageIO.read(new File("whitebloon.png"));
+			images[5] = ImageIO.read(new File("blackbloon.png"));
+			
+			//frozenImages[0] = ImageIO.read(new File("redbloonfrozen.png"));
+			//frozenImages[1] = ImageIO.read(new File("bluebloonfrozen.png"));
+			frozenImages[2] = ImageIO.read(new File("greenbloonfrozen.png"));
+			frozenImages[3] = ImageIO.read(new File("yellowbloonfrozen.png"));
+			frozenImages[4] = null;
+			//frozenImages[5] = ImageIO.read(new File("blackbloonfrozen.png"));
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -89,7 +99,7 @@ public class Bloon implements Comparable<Bloon>{
 		}
 		
 		// if a bloon moves towards its next point and does not overshoot
-		// then it is done wit3h the process, and it returns false (it hasn't reached the end)
+		// then it is done with the process, and it returns false (it hasn't reached the end)
 		String dir2 = getNextDirection(nextGoalX, nextGoalY);
 		if(nextDir.equals(dir2)) {
 			return false;
@@ -155,12 +165,16 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	public void update() {
+		if(layer == 4) {
+			isFrozen = false;
+		}
 		updateSpeed();
 		updatePositionFromCenteredXY();
 		updateHitbox();
 	}
 	
-	public boolean move() {
+	public boolean move(int currFrame) {
+		checkIfNotFrozen(currFrame);
 		if(!isFrozen) {
 			trackDist += speed;
 			boolean res = startMoveRec();
@@ -171,7 +185,29 @@ public class Bloon implements Comparable<Bloon>{
 		return false;
 	}
 	
-	public boolean popLayer() {
+	private void checkIfNotFrozen(int currFrame) {
+		isFrozen = (currFrame - frameFrozen < framesBloonsAreFrozenFor);
+	}
+	
+	public void freeze(int currFrame, int freezeFramesTime) {
+		frameFrozen = currFrame;
+		framesBloonsAreFrozenFor = freezeFramesTime;
+	}
+	
+	public void unfreeze() {
+		frameFrozen = -9999;
+		framesBloonsAreFrozenFor = 50;
+	}
+	
+	public boolean popLayer(boolean isBomb) {
+		if(isFrozen && !isBomb) {
+			return false;
+		}
+		
+		if(isFrozen && isBomb && layer == 5) {
+			return false;
+		}
+		
 		if(layer == 5) {
 			layer -= 2; // white bloon should skip to yellow
 		}else {
@@ -187,7 +223,11 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	public BufferedImage getImage() {
-		return images[layer];
+		if(!isFrozen) {
+			return images[layer]; 
+		}else {
+			return frozenImages[layer];
+		}
 	}
 	
 	public int getLayersToBePopped() {
@@ -230,14 +270,6 @@ public class Bloon implements Comparable<Bloon>{
 		this.layer = layer;
 	}
 
-	public boolean isFrozen() {
-		return isFrozen;
-	}
-
-	public void setFrozen(boolean isFrozen) {
-		this.isFrozen = isFrozen;
-	}
-
 	public static BufferedImage[] getImages() {
 		return images;
 	}
@@ -256,6 +288,10 @@ public class Bloon implements Comparable<Bloon>{
 
 	public void setTrackPoint(int trackPoint) {
 		this.trackPoint = trackPoint;
+	}
+	
+	public boolean isFrozen() {
+		return isFrozen;
 	}
 
 	@Override

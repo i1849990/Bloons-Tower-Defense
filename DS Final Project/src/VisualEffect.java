@@ -21,7 +21,7 @@ public class VisualEffect {
 			bloonPop = ImageIO.read(new File("pop22x24.png"));
 			
 			bombExplosionImages = new BufferedImage[6];
-			BufferedImage bombSpriteImage = ImageIO.read(new File("bombExploding600x100"));
+			BufferedImage bombSpriteImage = ImageIO.read(new File("bombExploding600x100.png"));
 			for(int i = 0; i < 6; i++) {
 				bombExplosionImages[i] = bombSpriteImage.getSubimage(i*100, 0, 100, 100);
 			}

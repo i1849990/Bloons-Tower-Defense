@@ -18,14 +18,21 @@ public class Game {
 	
 	private int currFrame;
 	private boolean roundInProgress;
+	private int framesBetweenBloonSpawns;
+	private int lastFrameSpawned;
 	
 	public Game(Track track) {
 		cash = 650;
 		lives = 40;
 		round = 0;
 		this.track = track;
+		Bloon.initalizeTrack(this.track);
 		currFrame = 0;
 		roundInProgress = false;
+		
+		// test different values
+		framesBetweenBloonSpawns = 20;
+		lastFrameSpawned = 0 - framesBetweenBloonSpawns;
 		
 		bloons = new ArrayList<Bloon>();
 		monkeys = new ArrayList<Monkey>();
@@ -44,14 +51,63 @@ public class Game {
 		moveProjectiles();
 		handleCollisions();
 		monkeysShoot();
+		spawnBloon();
+		
+		if(cash == Integer.MAX_VALUE) {
+			System.out.println("FUCK YOU");
+			System.exit(0);
+		}
 	}
 	
-	public void bombExplosion() {
+	public void bombExplosion(Projectile p) {
 		// acts differently from regular darts, see trello
+		int popCount = 1500;
+		int explosionX = p.getX() - 12;
+		int explosionY = p.getY() - 21;
+		int explosionDist = 1000;
+		
+		for(int i = 0; i < bloons.size(); i++) {
+			if(popCount <= 0) {
+				return;
+			}
+			
+			Bloon b = bloons.get(i);
+			int bloonX = b.getX();
+			int bloonY = b.getY();
+			
+			if((Math.sqrt(Math.pow(explosionX - bloonX, 2) + Math.pow(explosionY - bloonY, 2)) > explosionDist) || b.getLayer() == 5) {
+				continue;
+			}
+			
+			popCount--;
+			cash += 1;
+			
+			if(b.popLayer(true)) {
+				bloons.remove(b);
+				i--;
+			}
+			
+		}
 	}
 	
-	public void iceshot() {
+	public void iceshot(Monkey m) {
 		// similar case to bomb explosion
+		int monkeyX = m.getCenteredX();
+		int monkeyY = m.getCenteredY();
+		int radius = m.getRange();
+		
+		for(int i = 0; i < bloons.size(); i++) {
+			Bloon b = bloons.get(i);
+			int bloonX = b.getCenteredX();
+			int bloonY = b.getCenteredY();
+			
+			if((Math.sqrt(Math.pow(monkeyX - bloonX, 2) + Math.pow(monkeyY - bloonY, 2)) > radius)) {
+				continue;
+			}
+			
+			b.freeze(currFrame, ((IceMonkey) m).freezeTime);
+			
+		}
 	}
 	
 	public void tryToAdvanceRound() {
@@ -77,16 +133,28 @@ public class Game {
 					continue;
 				}
 				
-				cash += 1;
+				if(!b.isFrozen()) {
+					cash += 1;	
+				}
 				
 				if(p.handleCollision(b)) {
+					if(p.getName().equals("bomb")) {
+						bombExplosion(p);
+					}
+					
 					projectiles.remove(p);
+					
 					j--;
 				}
 				
-				if(b.popLayer()) {
+				if(p.getName().equals("bomb")) {
+					continue;
+				}
+				
+				if(b.popLayer(false)) {
 					bloons.remove(b);
 					i--;
+					break;
 				}
 			}
 		}
@@ -95,7 +163,7 @@ public class Game {
 	public void moveBloons() {
 		for(int i = 0; i < bloons.size(); i++) {
 			Bloon b = bloons.get(i);
-			if(b.move()) {
+			if(b.move(currFrame)) {
 				bloonReachesEnd(b);
 				i--;
 			}
@@ -135,9 +203,17 @@ public class Game {
 				continue;
 			}
 			
+			if(m.getName().equals("Ice Monkey")) {
+				m.pointTowardsBloonAndCreateProjectile(b, currFrame);
+				iceshot(m);
+				continue;
+			}
+			
 			Projectile[] output = (m.pointTowardsBloonAndCreateProjectile(b, currFrame));
-			for(Projectile p : output) {
-				projectiles.add(p);
+			if (output != null) {
+				for (Projectile p : output) {
+					projectiles.add(p);
+				} 
 			}
 		}
 	}
@@ -233,6 +309,12 @@ public class Game {
 			break;
 		}
 		return cost <= cash;
+	}
+	
+	public void spawnBloon() {
+		if(currFrame - lastFrameSpawned >= framesBetweenBloonSpawns) {
+			lastFrameSpawned = currFrame;
+		}
 	}
 	
 	public boolean getRoundInProgress() {

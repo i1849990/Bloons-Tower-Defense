@@ -125,7 +125,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 				toDraw =  m.getImage();
 				break;
 			case"Bomb Tower":
-				rotation -= Math.PI / 2;
+				rotation += Math.PI / 2;
 				toDraw =  m.getImage();
 				break;
 			case"Super Monkey":
@@ -514,9 +514,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton() == 3) {
-			game.bloons.add(new Bloon(game.track, 3));
+			game.bloons.add(new Bloon(3));
+			monkeyToBePlaced = null;
 		}
-		// TODO Auto-generated method stub
+		
 		// handle clicks on screengui, then monkeys
 		handleSelectedMonkey();
 		

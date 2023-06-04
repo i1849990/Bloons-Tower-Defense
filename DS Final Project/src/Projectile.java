@@ -27,6 +27,7 @@ public class Projectile {
 	public Projectile(String name, int centeredX, int centeredY, int speed, double rotation, int pierce) {
 		framesActiveFor = 0;
 		this.name = name;
+		
 		switch(name) {
 		case"dart":
 			x = centeredX - 5;
@@ -176,6 +177,26 @@ public class Projectile {
 
 	public void setHitbox(Rectangle hitbox) {
 		this.hitbox = hitbox;
+	}
+
+	public double getExactX() {
+		return exactX;
+	}
+
+	public void setExactX(double exactX) {
+		this.exactX = exactX;
+	}
+
+	public double getExactY() {
+		return exactY;
+	}
+
+	public void setExactY(double exactY) {
+		this.exactY = exactY;
 	}	
+	
+	public String getName() {
+		return name;
+	}
 	
 }

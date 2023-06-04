@@ -412,9 +412,11 @@ class TackShooter extends Monkey{
 
 class IceMonkey extends Monkey{
 	public static BufferedImage[] images;
-
+	
+	int freezeTime;
+	
 	public IceMonkey(int x, int y, int currFrame, Rectangle hitbox) {
-		super(850, 70, 1, 30, x, y, currFrame, hitbox);
+		super(850, 70, 1, 100, x, y, currFrame, hitbox);
 		centeredX = x + 50 / 2;
 		centeredY = y + 50 / 2;
 		name = "Ice Monkey";
@@ -422,11 +424,12 @@ class IceMonkey extends Monkey{
 		upgradeDescriptions = new String[] {"Longer Freeze", "Wider Freeze"};
 		sellPrice = 680;
 		delayBetweenFrames = 3;
+		freezeTime = 50;
 	}
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
-			//long freeze time
+			freezeTime = 70;
 			sellPrice = 880;
 		}
 		if(upgradesPurchased[1]) {
