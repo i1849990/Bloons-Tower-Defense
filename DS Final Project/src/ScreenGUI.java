@@ -38,7 +38,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	long sum; int nums;
 	
 	public ScreenGUI() {
-		JFrame frame = new JFrame("Title Name");
+		JFrame frame = new JFrame("Bloons Tower Defense");
 		frame.addMouseMotionListener(this);
 		frame.addMouseListener(this);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
