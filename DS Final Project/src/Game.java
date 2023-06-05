@@ -12,7 +12,6 @@ public class Game {
 	public ArrayList<Monkey> monkeys;
 	public ArrayList<Projectile> projectiles;
 	public ArrayList<VisualEffect> effects;
-	
 	private ArrayList<Bloon> bloonsToSpawn;
 	
 	public Track track;
@@ -22,6 +21,9 @@ public class Game {
 	private boolean roundInProgress;
 	private int framesBetweenBloonSpawns;
 	private int lastFrameSpawned;
+	
+	public boolean won;
+	public boolean lost;
 	
 	public Game(Track track) {
 		this.track = track;
@@ -53,6 +55,9 @@ public class Game {
 		projectiles = new ArrayList<Projectile>();
 		effects = new ArrayList<VisualEffect>();
 		bloonsToSpawn = new ArrayList<Bloon>();
+		
+		won = false;
+		lost = false;
 	}
 	
 	public void nextFrame() {
@@ -131,6 +136,9 @@ public class Game {
 		roundInProgress = false;
 		cash += 100;
 		framesBetweenBloonSpawns = 10 - (round / 10);
+		if(round == 50) {
+			won = true;
+		}
 	}
 	
 	private void tryToSpawnNextBloon() {
@@ -145,6 +153,10 @@ public class Game {
 	private void checkIfRoundIsOver() {
 		if(bloonsToSpawn.size() == 0 && bloons.size() == 0 && roundInProgress) {
 			endRound();
+		}
+		
+		if(lives <= 0) {
+			lost = true;
 		}
 	}
 	
@@ -256,7 +268,7 @@ public class Game {
 		currFrame = frame;
 	}
 	
-	private void resetGame() {
+	public void resetGame() {
 		startGame();
 	}
 	

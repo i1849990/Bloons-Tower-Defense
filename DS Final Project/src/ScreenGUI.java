@@ -27,7 +27,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	private int mouseX;
 	private int mouseY;
 	
-	BufferedImage introMessage;
+	BufferedImage introMessage, loseScreen, winScreen;
 	BufferedImage map;
 	BufferedImage[] towerDesc;
 	private Monkey selectedMonkey;
@@ -64,6 +64,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			
 			map = ImageIO.read(new File("map.png"));
 			
+			loseScreen = ImageIO.read(new File("loseScreen.png"));
+			winScreen = ImageIO.read(new File("winScreen.png"));
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,6 +95,13 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		if(game.getRound() == 0) {
 			drawIntroMessage(g);
+		}
+		
+		if(game.lost) {
+			g.drawImage(loseScreen, 0, 0, this);
+		}
+		if(game.won) {
+			g.drawImage(winwScreen, 0, 0, this);
 		}
 	}
 	
@@ -558,6 +568,11 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton() == 3) {
 			monkeyToBePlaced = null;
+			return;
+		}
+		
+		if(game.won || game.lost) {
+			game.resetGame();
 			return;
 		}
 		

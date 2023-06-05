@@ -30,6 +30,9 @@ public class Bloon implements Comparable<Bloon>{
 	public Rectangle hitbox;
 	private int frameFrozen;
 	private int framesBloonsAreFrozenFor;
+	private int xOffset;
+	private int yOffset;
+	
 	
 	public Bloon(int layer) {
 		trackPoint = 1;
@@ -41,6 +44,8 @@ public class Bloon implements Comparable<Bloon>{
 		trackDist = 0;
 		frameFrozen = -9999;
 		framesBloonsAreFrozenFor = 50;
+		xOffset = (int) (Math.random() * 11 - 5);
+		yOffset = (int) (Math.random() * 11 - 5);
 	}
 	
 	public static void initalizeTrack(Track track) {
@@ -165,6 +170,9 @@ public class Bloon implements Comparable<Bloon>{
 		int imgHeight = images[layer].getHeight();
 		x = centeredX - imgWidth / 2;
 		y = centeredY - imgHeight / 2;
+		System.out.println(xOffset);
+		x += xOffset;
+		y += yOffset;
 	}
 	
 	private void updateHitbox() {
