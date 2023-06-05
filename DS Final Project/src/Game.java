@@ -174,6 +174,7 @@ public class Game {
 				
 				if(!b.isFrozen()) {
 					cash += 1;	
+					// add pop sound
 				}
 				
 				if(p.getName().equals("bomb")) {
