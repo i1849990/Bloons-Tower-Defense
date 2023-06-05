@@ -64,12 +64,24 @@ public class Bloon implements Comparable<Bloon>{
 			frozenImages[1] = ImageIO.read(new File("FrozenBlueBloon.png"));
 			frozenImages[2] = ImageIO.read(new File("greenbloonfrozen.png"));
 			frozenImages[3] = ImageIO.read(new File("yellowbloonfrozen.png"));
-			frozenImages[4] = null;
+			frozenImages[4] = ImageIO.read(new File("FrozenRedBloon.png"));
 			frozenImages[5] = ImageIO.read(new File("FrozenBlackBloon.png"));
+			
+			downscaleImages(images, 0.7);
+			downscaleImages(frozenImages, 0.7);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public static void downscaleImages(BufferedImage[] input, double scale) {
+		for(int i = 0; i < input.length; i++) {
+			BufferedImage img = input[i];
+			int width = (int) (img.getWidth() * scale);
+			int height = (int) (img.getHeight() * scale);
+			input[i] = ScreenGUI.getScaledInstance(img, width, height);
 		}
 	}
 	

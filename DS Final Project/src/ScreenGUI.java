@@ -90,7 +90,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeyToBePlaced(g);
 		drawMonkeyDescription(g);
 		
-		if(currFrame <= 1000 && game.getRound() == 0) {
+		if(game.getRound() == 0) {
 			drawIntroMessage(g);
 		}
 	}
@@ -545,9 +545,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// magic numbers that returns the mouse's real position
 		mouseX = e.getX() - 6;
 		mouseY = e.getY() - 29;
-		hoveredMonkey = getMonkeyButtonClickedOn();
-		
-		repaint();		
+		hoveredMonkey = getMonkeyButtonClickedOn();	
 	}
 
 	@Override

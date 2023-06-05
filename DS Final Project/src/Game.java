@@ -1,8 +1,6 @@
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class Game {
