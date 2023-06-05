@@ -210,6 +210,9 @@ public class Bloon implements Comparable<Bloon>{
 	}
 	
 	public void freeze(int currFrame, int freezeFramesTime) {
+		if(layer == 4) {
+			return;
+		}
 		frameFrozen = currFrame;
 		framesBloonsAreFrozenFor = freezeFramesTime;
 	}
