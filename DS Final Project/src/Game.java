@@ -136,7 +136,17 @@ public class Game {
 	private void endRound() {
 		roundInProgress = false;
 		cash += 100;
-		framesBetweenBloonSpawns = 10 - (round / 10);
+		if(round >= 45) {
+			framesBetweenBloonSpawns = 3;
+		}else if(round >= 35) {
+			framesBetweenBloonSpawns = 5;
+		}else if(round >= 25) {
+			framesBetweenBloonSpawns = 7;
+		}else if(round >= 15) {
+			framesBetweenBloonSpawns = 8;
+		}else if(round >= 10) {
+			framesBetweenBloonSpawns = 9;
+		}
 		if(round == 50) {
 			won = true;
 		}

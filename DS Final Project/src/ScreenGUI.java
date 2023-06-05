@@ -573,6 +573,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		if(game.won || game.lost) {
 			game.resetGame();
+			selectedMonkey = null;
+			hoveredMonkey = null;
+			monkeyToBePlaced = null;
 			return;
 		}
 		
