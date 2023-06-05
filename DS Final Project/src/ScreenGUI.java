@@ -81,10 +81,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		game.updateFrame(currFrame);
 		
 		drawBackground(g);
-		drawBloons(g);
 		drawSelectedMonkeyRange(g);
 		drawProjectiles(g);
 		drawMonkeys(g);
+		drawBloons(g);
 		drawEffects(g);
 		drawGUI(g);
 		drawMonkeyToBePlaced(g);

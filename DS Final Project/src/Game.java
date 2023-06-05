@@ -38,6 +38,25 @@ public class Game {
 		startGame();
 	}
 	
+	public void startGame() {
+		cash = 650;
+		lives = 40;
+		round = 0;
+		s = new RoundScanner("Bloons per Round");
+		currFrame = 0;
+		roundInProgress = false;
+		
+		// test different values
+		framesBetweenBloonSpawns = 10;
+		lastFrameSpawned = 0 - framesBetweenBloonSpawns;
+		
+		bloons = new ArrayList<Bloon>();
+		monkeys = new ArrayList<Monkey>();
+		projectiles = new ArrayList<Projectile>();
+		effects = new ArrayList<VisualEffect>();
+		bloonsToSpawn = new ArrayList<Bloon>();
+	}
+	
 	public void nextFrame() {
 		moveBloons();
 		moveProjectiles();
@@ -113,6 +132,7 @@ public class Game {
 	private void endRound() {
 		roundInProgress = false;
 		cash += 100;
+		framesBetweenBloonSpawns = 10 - (round / 10);
 	}
 	
 	private void tryToSpawnNextBloon() {
@@ -236,25 +256,6 @@ public class Game {
 	
 	public void updateFrame(int frame) {
 		currFrame = frame;
-	}
-	
-	public void startGame() {
-		cash = 10000;
-		lives = 40;
-		round = 0;
-		s = new RoundScanner("Bloons per Round");
-		currFrame = 0;
-		roundInProgress = false;
-		
-		// test different values
-		framesBetweenBloonSpawns = 10;
-		lastFrameSpawned = 0 - framesBetweenBloonSpawns;
-		
-		bloons = new ArrayList<Bloon>();
-		monkeys = new ArrayList<Monkey>();
-		projectiles = new ArrayList<Projectile>();
-		effects = new ArrayList<VisualEffect>();
-		bloonsToSpawn = new ArrayList<Bloon>();
 	}
 	
 	private void resetGame() {
