@@ -92,6 +92,7 @@ public class Game {
 			
 			popCount--;
 			cash += 1;
+			// add pop sound
 			
 			if(b.popLayer(true)) {
 				bloons.remove(b);
