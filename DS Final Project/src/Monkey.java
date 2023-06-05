@@ -351,7 +351,7 @@ class TackShooter extends Monkey{
 	public static BufferedImage[] images;
 
 	public TackShooter(int x, int y, int currFrame, Rectangle hitbox) {
-		super(400, 70, 1, 60, x, y, currFrame, hitbox);
+		super(400, 70, 1, 70, x, y, currFrame, hitbox);
 		centeredX = x + 50 / 2;
 		centeredY = y + 50 / 2;
 		name = "Tack Shooter";
@@ -479,7 +479,7 @@ class BombTower extends Monkey{
 	public static BufferedImage[] images;
 
 	public BombTower(int x, int y, int currFrame, Rectangle hitbox) {
-		super(900, 120, 1, 30, x, y, currFrame, hitbox); //customize pierce
+		super(900, 120, 15, 80, x, y, currFrame, hitbox); //customize pierce
 		centeredX = x + 50 / 2;
 		centeredY = y + 50 / 2;
 		name = "Bomb Tower";
@@ -491,15 +491,15 @@ class BombTower extends Monkey{
 	
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
-			//bigger projectile
-			// update sell price 
+			pierce = 25;
+			sellPrice = 1240;
 		}
 		if(upgradesPurchased[1]) {
 			range = 140;
-			// update sell price 
+			sellPrice = 920;
 		}
 		if(upgradesPurchased[0] && upgradesPurchased[1]) {
-			// update sell price 
+			sellPrice = 1440;
 		}
 	}
 	

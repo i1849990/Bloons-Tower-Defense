@@ -45,14 +45,15 @@ public class Game {
 		monkeysShoot();
 		checkIfRoundIsOver();
 		tryToSpawnNextBloon();
+		updateEffects();
 	}
 	
 	public void bombExplosion(Projectile p) {
 		// acts differently from regular darts, see trello
-		int popCount = 1500;
+		int popCount = p.getPierce();
 		int explosionX = p.getX() - 12;
 		int explosionY = p.getY() - 21;
-		int explosionDist = 1000;
+		int explosionDist = 80;
 		
 		for(int i = 0; i < bloons.size(); i++) {
 			if(popCount <= 0) {
@@ -145,20 +146,22 @@ public class Game {
 					cash += 1;	
 				}
 				
+				if(p.getName().equals("bomb")) {
+					bombExplosion(p);
+					effects.add(new VisualEffect(currFrame, "bomb", b.getCenteredX(), b.getCenteredY()));
+					projectiles.remove(p);
+					j--;
+					continue;
+				}
+				
 				if(p.handleCollision(b)) {
-					if(p.getName().equals("bomb")) {
-						bombExplosion(p);
-					}
 					
 					projectiles.remove(p);
 					
 					j--;
 				}
-				
-				if(p.getName().equals("bomb")) {
-					continue;
-				}
-				
+
+				effects.add(new VisualEffect(currFrame, "pop", b.getCenteredX(), b.getCenteredY()));
 				if(b.popLayer(false)) {
 					bloons.remove(b);
 					i--;
@@ -236,7 +239,7 @@ public class Game {
 	}
 	
 	public void startGame() {
-		cash = 650;
+		cash = 10000;
 		lives = 40;
 		round = 0;
 		s = new RoundScanner("Bloons per Round");
@@ -336,6 +339,16 @@ public class Game {
 			break;
 		}
 		return cost <= cash;
+	}
+	
+	private void updateEffects() {
+		for(int i = 0; i < effects.size(); i++) {
+			VisualEffect effect = effects.get(i);
+			if(effect.isDone(currFrame)) {
+				effects.remove(effect);
+				i--;
+			}
+		}
 	}
 	
 	public boolean getRoundInProgress() {

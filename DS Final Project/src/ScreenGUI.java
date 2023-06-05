@@ -85,6 +85,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawSelectedMonkeyRange(g);
 		drawProjectiles(g);
 		drawMonkeys(g);
+		drawEffects(g);
 		drawGUI(g);
 		drawMonkeyToBePlaced(g);
 		drawMonkeyDescription(g);
@@ -450,6 +451,13 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		g.drawImage(desc, 600, 198, this);
 		
+	}
+	
+	private void drawEffects(Graphics g) {
+		for(int i = 0; i < game.effects.size(); i++) {
+			VisualEffect effect = game.effects.get(i);
+			g.drawImage(effect.getImage(currFrame), effect.getX(), effect.getY(), this);
+		}
 	}
 	
 	private void drawIntroMessage(Graphics g) {
