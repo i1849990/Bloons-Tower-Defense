@@ -170,7 +170,6 @@ public class Bloon implements Comparable<Bloon>{
 		int imgHeight = images[layer].getHeight();
 		x = centeredX - imgWidth / 2;
 		y = centeredY - imgHeight / 2;
-		System.out.println(xOffset);
 		x += xOffset;
 		y += yOffset;
 	}
