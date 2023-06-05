@@ -27,6 +27,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	private int mouseX;
 	private int mouseY;
 	
+	BufferedImage introMessage;
 	BufferedImage map;
 	BufferedImage[] towerDesc;
 	private Monkey selectedMonkey;
@@ -59,6 +60,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			towerDesc[3] = ImageIO.read(new File("bombDesc.png"));
 			towerDesc[4] = ImageIO.read(new File("superDesc.png"));
 			
+			introMessage = ImageIO.read(new File("introMessage.png"));
+			
 			map = ImageIO.read(new File("map.png"));
 			
 		} catch (IOException e) {
@@ -86,6 +89,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeyToBePlaced(g);
 		drawMonkeyDescription(g);
 		
+		if(currFrame <= 1000 && game.getRound() == 0) {
+			drawIntroMessage(g);
+		}
 	}
 	
 	public void drawBackground(Graphics g) {
@@ -444,6 +450,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		g.drawImage(desc, 600, 198, this);
 		
+	}
+	
+	private void drawIntroMessage(Graphics g) {
+		g.drawImage(introMessage, 47, 496, this);
 	}
 	
 	private boolean isValidSpotToPlace() {
