@@ -8,8 +8,8 @@ public class RoundScanner {
 	Scanner s;
 	
 	public RoundScanner(String textFileName) {
-		rounds = new File(textFileName);
 		try {
+			rounds = new File(textFileName);
 			s = new Scanner(rounds);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

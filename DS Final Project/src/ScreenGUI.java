@@ -28,8 +28,10 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	private int mouseY;
 	
 	BufferedImage map;
+	BufferedImage[] towerDesc;
 	private Monkey selectedMonkey;
 	private String monkeyToBePlaced;
+	private String hoveredMonkey;
 	int currFrame;
 	
 	long sum; int nums;
@@ -50,10 +52,14 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		t.start();
 		
 		try {
-			File file;
+			towerDesc = new BufferedImage[5];
+			towerDesc[0] = ImageIO.read(new File("dartDesc.png"));
+			towerDesc[1] = ImageIO.read(new File("tackDesc.png"));
+			towerDesc[2] = ImageIO.read(new File("iceDesc.png"));
+			towerDesc[3] = ImageIO.read(new File("bombDesc.png"));
+			towerDesc[4] = ImageIO.read(new File("superDesc.png"));
 			
-			file = new File("map.png");
-			map = ImageIO.read(file);
+			map = ImageIO.read(new File("map.png"));
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,11 +70,11 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	public void paint(Graphics g) {
-		long time = System.currentTimeMillis();
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 8000, 6000);
 		
 		game.nextFrame();
+		currFrame++;
 		game.updateFrame(currFrame);
 		
 		drawBackground(g);
@@ -78,15 +84,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		drawMonkeys(g);
 		drawGUI(g);
 		drawMonkeyToBePlaced(g);
+		drawMonkeyDescription(g);
 		
-		if (nums == 100) {
-			System.out.println(sum / 100);
-			nums = 1;
-			sum = (System.currentTimeMillis() - time);
-		}else {
-			sum += (System.currentTimeMillis() - time);
-			nums++;
-		}
 	}
 	
 	public void drawBackground(Graphics g) {
@@ -419,6 +418,34 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		monkeyToBePlaced = null;
 	}
 	
+	private void drawMonkeyDescription(Graphics g) {
+		if(hoveredMonkey == null) {
+			return;
+		}
+		int index = 0;
+		switch(hoveredMonkey) {
+		case"dart":
+			index = 0;
+			break;
+		case"tack":
+			index = 1;
+			break;
+		case"ice":
+			index = 2;
+			break;
+		case"bomb":
+			index = 3;
+			break;
+		case"super":
+			index = 4;
+			break;
+		}
+		BufferedImage desc = towerDesc[index];
+		
+		g.drawImage(desc, 600, 198, this);
+		
+	}
+	
 	private boolean isValidSpotToPlace() {
 		int width = 30;
 		int height = 30;
@@ -491,7 +518,6 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == t) { 
-			currFrame++;
 			repaint();
 		}
 		
@@ -501,6 +527,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		// magic numbers that returns the mouse's real position
 		mouseX = e.getX() - 6;
 		mouseY = e.getY() - 29;
+		hoveredMonkey = getMonkeyButtonClickedOn();
 		
 		repaint();		
 	}
@@ -514,8 +541,8 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(e.getButton() == 3) {
-			game.bloons.add(new Bloon(3));
 			monkeyToBePlaced = null;
+			return;
 		}
 		
 		// handle clicks on screengui, then monkeys
@@ -540,7 +567,9 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 		
 		String buttonClicked = getMonkeyButtonClickedOn();
 		if(buttonClicked != null) {
-			monkeyToBePlaced = buttonClicked;
+			if (game.canAffordTower(buttonClicked)) {
+				monkeyToBePlaced = buttonClicked;
+			}
 		}
 		
 		if(monkeyToBePlaced != null && isValidSpotToPlace()) {

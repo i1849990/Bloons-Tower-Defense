@@ -1,5 +1,6 @@
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +15,10 @@ public class Game {
 	public ArrayList<Projectile> projectiles;
 	public ArrayList<VisualEffect> effects;
 	
+	private ArrayList<Bloon> bloonsToSpawn;
+	
 	public Track track;
+	private RoundScanner s;
 	
 	private int currFrame;
 	private boolean roundInProgress;
@@ -22,28 +26,16 @@ public class Game {
 	private int lastFrameSpawned;
 	
 	public Game(Track track) {
-		cash = 650;
-		lives = 40;
-		round = 0;
 		this.track = track;
 		Bloon.initalizeTrack(this.track);
-		currFrame = 0;
-		roundInProgress = false;
-		
-		// test different values
-		framesBetweenBloonSpawns = 20;
-		lastFrameSpawned = 0 - framesBetweenBloonSpawns;
-		
-		bloons = new ArrayList<Bloon>();
-		monkeys = new ArrayList<Monkey>();
-		projectiles = new ArrayList<Projectile>();
-		effects = new ArrayList<VisualEffect>();
+		s = new RoundScanner("Bloons per Round");
 		
 		Bloon.initializeImages();
 		Monkey.initializeImages();
 		VisualEffect.intitializeImages();
 		Projectile.initializeImages();
 		
+		startGame();
 	}
 	
 	public void nextFrame() {
@@ -51,12 +43,8 @@ public class Game {
 		moveProjectiles();
 		handleCollisions();
 		monkeysShoot();
-		spawnBloon();
-		
-		if(cash == Integer.MAX_VALUE) {
-			System.out.println("FUCK YOU");
-			System.exit(0);
-		}
+		checkIfRoundIsOver();
+		tryToSpawnNextBloon();
 	}
 	
 	public void bombExplosion(Projectile p) {
@@ -111,14 +99,34 @@ public class Game {
 	}
 	
 	public void tryToAdvanceRound() {
-		if(!roundInProgress) {
-			roundInProgress = true;
-			round++;
+		if(roundInProgress) {
+			return;
 		}
+		
+		round++;
+		bloonsToSpawn = s.getNextRoundBloonArray();
+		lastFrameSpawned = 0 - framesBetweenBloonSpawns;
+		roundInProgress = true;
 	}
 	
 	private void endRound() {
+		roundInProgress = false;
 		cash += 100;
+	}
+	
+	private void tryToSpawnNextBloon() {
+		if(currFrame - lastFrameSpawned < framesBetweenBloonSpawns || !roundInProgress || bloonsToSpawn.size() == 0) {
+			return;
+		}
+		
+		lastFrameSpawned = currFrame;
+		bloons.add(bloonsToSpawn.remove(0));
+	}
+	
+	private void checkIfRoundIsOver() {
+		if(bloonsToSpawn.size() == 0 && bloons.size() == 0 && roundInProgress) {
+			endRound();
+		}
 	}
 	
 	public void handleCollisions() {
@@ -228,7 +236,26 @@ public class Game {
 	}
 	
 	public void startGame() {
+		cash = 650;
+		lives = 40;
+		round = 0;
+		s = new RoundScanner("Bloons per Round");
+		currFrame = 0;
+		roundInProgress = false;
 		
+		// test different values
+		framesBetweenBloonSpawns = 10;
+		lastFrameSpawned = 0 - framesBetweenBloonSpawns;
+		
+		bloons = new ArrayList<Bloon>();
+		monkeys = new ArrayList<Monkey>();
+		projectiles = new ArrayList<Projectile>();
+		effects = new ArrayList<VisualEffect>();
+		bloonsToSpawn = new ArrayList<Bloon>();
+	}
+	
+	private void resetGame() {
+		startGame();
 	}
 	
 	public void tryToPurchaseUpgrade0(Monkey m) {
@@ -309,12 +336,6 @@ public class Game {
 			break;
 		}
 		return cost <= cash;
-	}
-	
-	public void spawnBloon() {
-		if(currFrame - lastFrameSpawned >= framesBetweenBloonSpawns) {
-			lastFrameSpawned = currFrame;
-		}
 	}
 	
 	public boolean getRoundInProgress() {

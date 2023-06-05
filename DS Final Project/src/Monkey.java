@@ -351,7 +351,7 @@ class TackShooter extends Monkey{
 	public static BufferedImage[] images;
 
 	public TackShooter(int x, int y, int currFrame, Rectangle hitbox) {
-		super(400, 70, 1, 30, x, y, currFrame, hitbox);
+		super(400, 70, 1, 60, x, y, currFrame, hitbox);
 		centeredX = x + 50 / 2;
 		centeredY = y + 50 / 2;
 		name = "Tack Shooter";
@@ -392,6 +392,7 @@ class TackShooter extends Monkey{
 	public void updateUpgrades() {
 		if(upgradesPurchased[0]) {
 			// increase attack speed
+			attackSpeed = 50;
 			sellPrice = 520;
 		}
 		if(upgradesPurchased[1]) {
