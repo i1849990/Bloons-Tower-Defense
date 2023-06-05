@@ -24,7 +24,6 @@ public class Bloon implements Comparable<Bloon>{
 	private static Track t;
 	public static BufferedImage[] images;
 	public static BufferedImage[] frozenImages;
-	//public static double[] speeds = {1.8,2.0,3,4,3,3};
 	public static double[] speeds = {2.7,3.0,4.5,5.5,4.5,4.5};
 	private double speed;
 	public Rectangle hitbox;
