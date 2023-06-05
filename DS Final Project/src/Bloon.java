@@ -60,12 +60,12 @@ public class Bloon implements Comparable<Bloon>{
 			images[4] = ImageIO.read(new File("whitebloon.png"));
 			images[5] = ImageIO.read(new File("blackbloon.png"));
 			
-			//frozenImages[0] = ImageIO.read(new File("redbloonfrozen.png"));
-			//frozenImages[1] = ImageIO.read(new File("bluebloonfrozen.png"));
+			frozenImages[0] = ImageIO.read(new File("FrozenRedBloon.png"));
+			frozenImages[1] = ImageIO.read(new File("FrozenBlueBloon.png"));
 			frozenImages[2] = ImageIO.read(new File("greenbloonfrozen.png"));
 			frozenImages[3] = ImageIO.read(new File("yellowbloonfrozen.png"));
 			frozenImages[4] = null;
-			//frozenImages[5] = ImageIO.read(new File("blackbloonfrozen.png"));
+			frozenImages[5] = ImageIO.read(new File("FrozenBlackBloon.png"));
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
