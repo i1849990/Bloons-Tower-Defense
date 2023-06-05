@@ -101,7 +101,7 @@ public class ScreenGUI extends JPanel implements MouseMotionListener, MouseListe
 			g.drawImage(loseScreen, 0, 0, this);
 		}
 		if(game.won) {
-			g.drawImage(winwScreen, 0, 0, this);
+			g.drawImage(winScreen, 0, 0, this);
 		}
 	}
 	
