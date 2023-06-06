@@ -25,6 +25,8 @@ public class Game {
 	public boolean won;
 	public boolean lost;
 	
+	Music m = new Music("bloonpopping (1).wav", false);
+	
 	public Game(Track track) {
 		this.track = track;
 		Bloon.initalizeTrack(this.track);
@@ -93,6 +95,7 @@ public class Game {
 			popCount--;
 			cash += 1;
 			// add pop sound
+			m.start2();
 			
 			if(b.popLayer(true)) {
 				bloons.remove(b);
@@ -184,8 +187,10 @@ public class Game {
 				}
 				
 				if(!b.isFrozen()) {
+					m.start2();
 					cash += 1;	
 					// add pop sound
+					
 				}
 				
 				if(p.getName().equals("bomb")) {
